@@ -757,59 +757,7 @@ function fnc_project_color(values, context) {
 
 
 
-function exp_Zbiornikiwodne_1rule0_eval_expression(context) {
-    // fclass  IN ('dock', 'reservoir', 'riverbank', 'water')
-
-    var feature = context.feature;
-    
-    if (feature.properties) {
-        return "'dock', 'reservoir', 'riverbank', 'water'".indexOf(feature.properties['fclass'] ) > -1 ;
-    } else {
-        return "'dock', 'reservoir', 'riverbank', 'water'".indexOf(feature['fclass'] ) > -1 ;
-    }
-}
-
-
-function exp_Zbiornikiwodne_1rule1_eval_expression(context) {
-    // fclass = 'wetland'
-
-    var feature = context.feature;
-    
-    if (feature.properties) {
-        return (feature.properties['fclass']  == 'wetland');
-    } else {
-        return (feature['fclass']  == 'wetland');
-    }
-}
-
-
-function exp_Zbiornikiwodne_1rule0_eval_expression(context) {
-    // fclass  IN ('dock', 'reservoir', 'riverbank', 'water')
-
-    var feature = context.feature;
-    
-    if (feature.properties) {
-        return "'dock', 'reservoir', 'riverbank', 'water'".indexOf(feature.properties['fclass'] ) > -1 ;
-    } else {
-        return "'dock', 'reservoir', 'riverbank', 'water'".indexOf(feature['fclass'] ) > -1 ;
-    }
-}
-
-
-function exp_Zbiornikiwodne_1rule1_eval_expression(context) {
-    // fclass = 'wetland'
-
-    var feature = context.feature;
-    
-    if (feature.properties) {
-        return (feature.properties['fclass']  == 'wetland');
-    } else {
-        return (feature['fclass']  == 'wetland');
-    }
-}
-
-
-function exp_Natura_3rule0_eval_expression(context) {
+function exp_Natura_1rule0_eval_expression(context) {
     // category  IN ('aquarium', 'water', 'spring', 'fountain')
 
     var feature = context.feature;
@@ -822,7 +770,7 @@ function exp_Natura_3rule0_eval_expression(context) {
 }
 
 
-function exp_Natura_3rule1_eval_expression(context) {
+function exp_Natura_1rule1_eval_expression(context) {
     // category = 'beach'
 
     var feature = context.feature;
@@ -835,7 +783,7 @@ function exp_Natura_3rule1_eval_expression(context) {
 }
 
 
-function exp_Natura_3rule2_eval_expression(context) {
+function exp_Natura_1rule2_eval_expression(context) {
     // category = 'cave_entrance'
 
     var feature = context.feature;
@@ -848,7 +796,7 @@ function exp_Natura_3rule2_eval_expression(context) {
 }
 
 
-function exp_Natura_3rule3_eval_expression(context) {
+function exp_Natura_1rule3_eval_expression(context) {
     // category  IN ('nature_reserve', 'park')
 
     var feature = context.feature;
@@ -861,7 +809,7 @@ function exp_Natura_3rule3_eval_expression(context) {
 }
 
 
-function exp_Natura_3rule4_eval_expression(context) {
+function exp_Natura_1rule4_eval_expression(context) {
     // category = 'peak'
 
     var feature = context.feature;
@@ -874,7 +822,7 @@ function exp_Natura_3rule4_eval_expression(context) {
 }
 
 
-function exp_Natura_3rule5_eval_expression(context) {
+function exp_Natura_1rule5_eval_expression(context) {
     // category = 'picnic_site'
 
     var feature = context.feature;
@@ -887,7 +835,7 @@ function exp_Natura_3rule5_eval_expression(context) {
 }
 
 
-function exp_Natura_3rule6_eval_expression(context) {
+function exp_Natura_1rule6_eval_expression(context) {
     // category = 'wilderness_hut'
 
     var feature = context.feature;
@@ -900,7 +848,7 @@ function exp_Natura_3rule6_eval_expression(context) {
 }
 
 
-function exp_Natura_3rule7_eval_expression(context) {
+function exp_Natura_1rule7_eval_expression(context) {
     // category = 'zoo'
 
     var feature = context.feature;
@@ -909,6 +857,123 @@ function exp_Natura_3rule7_eval_expression(context) {
         return (feature.properties['category']  == 'zoo');
     } else {
         return (feature['category']  == 'zoo');
+    }
+}
+
+
+function exp_Inne_2rule0_eval_expression(context) {
+    // category = 'bench'
+
+    var feature = context.feature;
+    
+    if (feature.properties) {
+        return (feature.properties['category']  == 'bench');
+    } else {
+        return (feature['category']  == 'bench');
+    }
+}
+
+
+function exp_Inne_2rule1_eval_expression(context) {
+    // category  IN ('building', 'protected_building', 'tower', 'mill')
+
+    var feature = context.feature;
+    
+    if (feature.properties) {
+        return "'building', 'protected_building', 'tower', 'mill'".indexOf(feature.properties['category'] ) > -1 ;
+    } else {
+        return "'building', 'protected_building', 'tower', 'mill'".indexOf(feature['category'] ) > -1 ;
+    }
+}
+
+
+function exp_Inne_2rule2_eval_expression(context) {
+    // category  IN ('hunting_lodge', 'game_feeding;shelter')
+
+    var feature = context.feature;
+    
+    if (feature.properties) {
+        return "'hunting_lodge', 'game_feeding;shelter'".indexOf(feature.properties['category'] ) > -1 ;
+    } else {
+        return "'hunting_lodge', 'game_feeding;shelter'".indexOf(feature['category'] ) > -1 ;
+    }
+}
+
+
+function exp_Inne_2rule3_eval_expression(context) {
+    // category = 'information'
+
+    var feature = context.feature;
+    
+    if (feature.properties) {
+        return (feature.properties['category']  == 'information');
+    } else {
+        return (feature['category']  == 'information');
+    }
+}
+
+
+function exp_Inne_2rule4_eval_expression(context) {
+    // category = 'pillory'
+
+    var feature = context.feature;
+    
+    if (feature.properties) {
+        return (feature.properties['category']  == 'pillory');
+    } else {
+        return (feature['category']  == 'pillory');
+    }
+}
+
+
+function exp_Inne_2rule5_eval_expression(context) {
+    // category  IN ('cemetery', 'chapel', 'church', 'manor', 'place_of_worship', 'wayside_chapel', 'wayside_cross', 'wayside_shrine')
+
+    var feature = context.feature;
+    
+    if (feature.properties) {
+        return "'cemetery', 'chapel', 'church', 'manor', 'place_of_worship', 'wayside_chapel', 'wayside_cross', 'wayside_shrine'".indexOf(feature.properties['category'] ) > -1 ;
+    } else {
+        return "'cemetery', 'chapel', 'church', 'manor', 'place_of_worship', 'wayside_chapel', 'wayside_cross', 'wayside_shrine'".indexOf(feature['category'] ) > -1 ;
+    }
+}
+
+
+function exp_Inne_2rule6_eval_expression(context) {
+    // category = 'theme_park'
+
+    var feature = context.feature;
+    
+    if (feature.properties) {
+        return (feature.properties['category']  == 'theme_park');
+    } else {
+        return (feature['category']  == 'theme_park');
+    }
+}
+
+
+function exp_Inne_3rule0_eval_expression(context) {
+    // category = 'cemetery'
+
+    var feature = context.feature;
+    
+    if (feature.properties) {
+        return (feature.properties['category']  == 'cemetery');
+    } else {
+        return (feature['category']  == 'cemetery');
+    }
+}
+
+
+function exp_Inne_3rule1_eval_expression(context) {
+    // category = 'theme_park'
+
+    var feature = context.feature;
+    
+    if (feature.properties) {
+        return (feature.properties['category']  == 'theme_park');
+    } else {
+        return (feature['category']  == 'theme_park');
     }
 }
 
@@ -965,124 +1030,7 @@ function exp_SchronienieiZakwaterowanie_4rule3_eval_expression(context) {
 }
 
 
-function exp_Inne_5rule0_eval_expression(context) {
-    // category = 'bench'
-
-    var feature = context.feature;
-    
-    if (feature.properties) {
-        return (feature.properties['category']  == 'bench');
-    } else {
-        return (feature['category']  == 'bench');
-    }
-}
-
-
-function exp_Inne_5rule1_eval_expression(context) {
-    // category  IN ('building', 'protected_building', 'tower', 'mill')
-
-    var feature = context.feature;
-    
-    if (feature.properties) {
-        return "'building', 'protected_building', 'tower', 'mill'".indexOf(feature.properties['category'] ) > -1 ;
-    } else {
-        return "'building', 'protected_building', 'tower', 'mill'".indexOf(feature['category'] ) > -1 ;
-    }
-}
-
-
-function exp_Inne_5rule2_eval_expression(context) {
-    // category  IN ('hunting_lodge', 'game_feeding;shelter')
-
-    var feature = context.feature;
-    
-    if (feature.properties) {
-        return "'hunting_lodge', 'game_feeding;shelter'".indexOf(feature.properties['category'] ) > -1 ;
-    } else {
-        return "'hunting_lodge', 'game_feeding;shelter'".indexOf(feature['category'] ) > -1 ;
-    }
-}
-
-
-function exp_Inne_5rule3_eval_expression(context) {
-    // category = 'information'
-
-    var feature = context.feature;
-    
-    if (feature.properties) {
-        return (feature.properties['category']  == 'information');
-    } else {
-        return (feature['category']  == 'information');
-    }
-}
-
-
-function exp_Inne_5rule4_eval_expression(context) {
-    // category = 'pillory'
-
-    var feature = context.feature;
-    
-    if (feature.properties) {
-        return (feature.properties['category']  == 'pillory');
-    } else {
-        return (feature['category']  == 'pillory');
-    }
-}
-
-
-function exp_Inne_5rule5_eval_expression(context) {
-    // category  IN ('cemetery', 'chapel', 'church', 'manor', 'place_of_worship', 'wayside_chapel', 'wayside_cross', 'wayside_shrine')
-
-    var feature = context.feature;
-    
-    if (feature.properties) {
-        return "'cemetery', 'chapel', 'church', 'manor', 'place_of_worship', 'wayside_chapel', 'wayside_cross', 'wayside_shrine'".indexOf(feature.properties['category'] ) > -1 ;
-    } else {
-        return "'cemetery', 'chapel', 'church', 'manor', 'place_of_worship', 'wayside_chapel', 'wayside_cross', 'wayside_shrine'".indexOf(feature['category'] ) > -1 ;
-    }
-}
-
-
-function exp_Inne_5rule6_eval_expression(context) {
-    // category = 'theme_park'
-
-    var feature = context.feature;
-    
-    if (feature.properties) {
-        return (feature.properties['category']  == 'theme_park');
-    } else {
-        return (feature['category']  == 'theme_park');
-    }
-}
-
-
-function exp_Inne_6rule0_eval_expression(context) {
-    // category = 'cemetery'
-
-    var feature = context.feature;
-    
-    if (feature.properties) {
-        return (feature.properties['category']  == 'cemetery');
-    } else {
-        return (feature['category']  == 'cemetery');
-    }
-}
-
-
-function exp_Inne_6rule1_eval_expression(context) {
-    // category = 'theme_park'
-
-    var feature = context.feature;
-    
-    if (feature.properties) {
-        return (feature.properties['category']  == 'theme_park');
-    } else {
-        return (feature['category']  == 'theme_park');
-    }
-}
-
-
-function exp_Odpoczynek_7rule0_eval_expression(context) {
+function exp_Odpoczynek_5rule0_eval_expression(context) {
     // category = 'cafe'
 
     var feature = context.feature;
@@ -1095,7 +1043,7 @@ function exp_Odpoczynek_7rule0_eval_expression(context) {
 }
 
 
-function exp_Odpoczynek_7rule1_eval_expression(context) {
+function exp_Odpoczynek_5rule1_eval_expression(context) {
     // category = 'drinking_water'
 
     var feature = context.feature;
@@ -1108,7 +1056,7 @@ function exp_Odpoczynek_7rule1_eval_expression(context) {
 }
 
 
-function exp_Odpoczynek_7rule2_eval_expression(context) {
+function exp_Odpoczynek_5rule2_eval_expression(context) {
     // category = 'restaurant'
 
     var feature = context.feature;
@@ -1121,7 +1069,7 @@ function exp_Odpoczynek_7rule2_eval_expression(context) {
 }
 
 
-function exp_Odpoczynek_7rule3_eval_expression(context) {
+function exp_Odpoczynek_5rule3_eval_expression(context) {
     // category = 'toilets'
 
     var feature = context.feature;
@@ -1134,7 +1082,7 @@ function exp_Odpoczynek_7rule3_eval_expression(context) {
 }
 
 
-function exp_Sztuka_8rule0_eval_expression(context) {
+function exp_Sztuka_6rule0_eval_expression(context) {
     // tourism = 'attraction'
 
     var feature = context.feature;
@@ -1147,7 +1095,7 @@ function exp_Sztuka_8rule0_eval_expression(context) {
 }
 
 
-function exp_Sztuka_8rule1_eval_expression(context) {
+function exp_Sztuka_6rule1_eval_expression(context) {
     // tourism = 'gallery'
 
     var feature = context.feature;
@@ -1160,7 +1108,7 @@ function exp_Sztuka_8rule1_eval_expression(context) {
 }
 
 
-function exp_Sztuka_8rule2_eval_expression(context) {
+function exp_Sztuka_6rule2_eval_expression(context) {
     // tourism = 'viewpoint'
 
     var feature = context.feature;
@@ -1173,7 +1121,7 @@ function exp_Sztuka_8rule2_eval_expression(context) {
 }
 
 
-function exp_Sztuka_8rule3_eval_expression(context) {
+function exp_Sztuka_6rule3_eval_expression(context) {
     // tourism = 'artwork'
 
     var feature = context.feature;
@@ -1186,7 +1134,7 @@ function exp_Sztuka_8rule3_eval_expression(context) {
 }
 
 
-function exp_MiejscaHistoryczne_9rule0_eval_expression(context) {
+function exp_MiejscaHistoryczne_7rule0_eval_expression(context) {
     // category = 'archaeological_site'
 
     var feature = context.feature;
@@ -1199,7 +1147,7 @@ function exp_MiejscaHistoryczne_9rule0_eval_expression(context) {
 }
 
 
-function exp_MiejscaHistoryczne_9rule1_eval_expression(context) {
+function exp_MiejscaHistoryczne_7rule1_eval_expression(context) {
     // category = 'museum'
 
     var feature = context.feature;
@@ -1212,7 +1160,7 @@ function exp_MiejscaHistoryczne_9rule1_eval_expression(context) {
 }
 
 
-function exp_MiejscaHistoryczne_9rule2_eval_expression(context) {
+function exp_MiejscaHistoryczne_7rule2_eval_expression(context) {
     // category = 'palace'
 
     var feature = context.feature;
@@ -1225,7 +1173,7 @@ function exp_MiejscaHistoryczne_9rule2_eval_expression(context) {
 }
 
 
-function exp_MiejscaHistoryczne_9rule3_eval_expression(context) {
+function exp_MiejscaHistoryczne_7rule3_eval_expression(context) {
     // category  IN ('bomb_crater', 'battlefield')
 
     var feature = context.feature;
@@ -1238,7 +1186,7 @@ function exp_MiejscaHistoryczne_9rule3_eval_expression(context) {
 }
 
 
-function exp_MiejscaHistoryczne_9rule4_eval_expression(context) {
+function exp_MiejscaHistoryczne_7rule4_eval_expression(context) {
     // category  IN ('citywalls', 'city_gate', 'gate', 'fort', 'ruins', 'castle')
 
     var feature = context.feature;
@@ -1251,7 +1199,7 @@ function exp_MiejscaHistoryczne_9rule4_eval_expression(context) {
 }
 
 
-function exp_MiejscaHistoryczne_9rule5_eval_expression(context) {
+function exp_MiejscaHistoryczne_7rule5_eval_expression(context) {
     // category  IN ('heritage', 'monument', 'tomb', 'memorial')
 
     var feature = context.feature;
@@ -1264,7 +1212,7 @@ function exp_MiejscaHistoryczne_9rule5_eval_expression(context) {
 }
 
 
-function exp_MiejscaHistoryczne_10rule0_eval_expression(context) {
+function exp_MiejscaHistoryczne_8rule0_eval_expression(context) {
     // category = 'archaeological_site'
 
     var feature = context.feature;
@@ -1277,7 +1225,7 @@ function exp_MiejscaHistoryczne_10rule0_eval_expression(context) {
 }
 
 
-function exp_MiejscaHistoryczne_10rule1_eval_expression(context) {
+function exp_MiejscaHistoryczne_8rule1_eval_expression(context) {
     // category = 'bomb_crater'
 
     var feature = context.feature;
@@ -1290,7 +1238,7 @@ function exp_MiejscaHistoryczne_10rule1_eval_expression(context) {
 }
 
 
-function exp_MiejscaHistoryczne_10rule2_eval_expression(context) {
+function exp_MiejscaHistoryczne_8rule2_eval_expression(context) {
     // category  IN ('ruins', 'citywalls', 'city_gate', 'castle', 'fort')
 
     var feature = context.feature;
@@ -1303,7 +1251,7 @@ function exp_MiejscaHistoryczne_10rule2_eval_expression(context) {
 }
 
 
-function exp_MiejscaHistoryczne_10rule3_eval_expression(context) {
+function exp_MiejscaHistoryczne_8rule3_eval_expression(context) {
     // category  IN ('tomb', 'memorial', 'monument', 'heritage')
 
     var feature = context.feature;

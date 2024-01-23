@@ -6,12 +6,10 @@
         <meta name="viewport" content="initial-scale=1,user-scalable=no,maximum-scale=1,width=device-width">
         <meta name="mobile-web-app-capable" content="yes">
         <meta name="apple-mobile-web-app-capable" content="yes">
-        <link rel="stylesheet" href="css/leaflet.css">
+        <link rel="stylesheet" href="css/leaflet.css"><link rel="stylesheet" href="css/L.Control.Locate.min.css">
         <link rel="stylesheet" href="css/qgis2web.css"><link rel="stylesheet" href="css/fontawesome-all.min.css">
         <link rel="stylesheet" href="css/MarkerCluster.css">
         <link rel="stylesheet" href="css/MarkerCluster.Default.css">
-        <link rel="stylesheet" href="css/filter.css">
-<link rel="stylesheet" href="css/nouislider.min.css">
         <link rel="stylesheet" href="css/leaflet-control-geocoder.Geocoder.css">
         <link rel="stylesheet" href="css/leaflet-measure.css">
         <style>
@@ -28,7 +26,7 @@
         <div id="map">
         </div>
         <script src="js/qgis2web_expressions.js"></script>
-        <script src="js/leaflet.js"></script>
+        <script src="js/leaflet.js"></script><script src="js/L.Control.Locate.min.js"></script>
         <script src="js/multi-style-layer.js"></script>
         <script src="js/leaflet.rotatedMarker.js"></script>
         <script src="js/leaflet.pattern.js"></script>
@@ -39,52 +37,24 @@
         <script src="js/labels.js"></script>
         <script src="js/leaflet-control-geocoder.Geocoder.js"></script>
         <script src="js/leaflet-measure.js"></script>
-        <script src="js/proj4.js"></script>
-        <script src="js/proj4leaflet.js"></script>
         <script src="js/leaflet.markercluster.js"></script>
-        <script src="js/tailDT.js"></script>
-<script src="js/nouislider.min.js"></script>
-<script src="js/wNumb.js"></script>
-        <script src="data/Zbiornikiwodne_1.js"></script>
-        <script src="data/Ciekiwodne_2.js"></script>
-        <script src="data/Natura_3.js"></script>
+        <script src="data/Natura_1.js"></script>
+        <script src="data/Inne_2.js"></script>
+        <script src="data/Inne_3.js"></script>
         <script src="data/SchronienieiZakwaterowanie_4.js"></script>
-        <script src="data/Inne_5.js"></script>
-        <script src="data/Inne_6.js"></script>
-        <script src="data/Odpoczynek_7.js"></script>
-        <script src="data/Sztuka_8.js"></script>
-        <script src="data/MiejscaHistoryczne_9.js"></script>
-        <script src="data/MiejscaHistoryczne_10.js"></script>
-        <script src="data/ObiektyPRG_11.js"></script>
+        <script src="data/Odpoczynek_5.js"></script>
+        <script src="data/Sztuka_6.js"></script>
+        <script src="data/MiejscaHistoryczne_7.js"></script>
+        <script src="data/MiejscaHistoryczne_8.js"></script>
+        <script src="data/ObiektyPRG_9.js"></script>
         <script>
-        var highlightLayer;
-        function highlightFeature(e) {
-            highlightLayer = e.target;
-
-            if (e.target.feature.geometry.type === 'LineString') {
-              highlightLayer.setStyle({
-                color: '#ffff00',
-              });
-            } else {
-              highlightLayer.setStyle({
-                fillColor: '#ffff00',
-                fillOpacity: 1
-              });
-            }
-            highlightLayer.openPopup();
-        }
-        var crs = new L.Proj.CRS('EPSG:3857', '+proj=merc +a=6378137 +b=6378137 +lat_ts=0 +lon_0=0 +x_0=0 +y_0=0 +k=1 +units=m +nadgrids=@null +wktext +no_defs', {
-            resolutions: [2800, 1400, 700, 350, 175, 84, 42, 21, 11.2, 5.6, 2.8, 1.4, 0.7, 0.35, 0.14, 0.07],
-        });
         var map = L.map('map', {
-            crs: crs,
-            continuousWorld: false,
-            worldCopyJump: false, 
-            zoomControl:true, maxZoom:15, minZoom:1
+            zoomControl:true, maxZoom:20, minZoom:1
         })
         var hash = new L.Hash(map);
         map.attributionControl.setPrefix('<a href="https://github.com/tomchadwin/qgis2web" target="_blank">qgis2web</a> &middot; <a href="https://leafletjs.com" title="A JS library for interactive maps">Leaflet</a> &middot; <a href="https://qgis.org">QGIS</a>');
         var autolinker = new Autolinker({truncate: {length: 30, location: 'smart'}});
+        L.control.locate({locateOptions: {maxZoom: 19}}).addTo(map);
         var measureControl = new L.Control.Measure({
             position: 'topleft',
             primaryLengthUnit: 'meters',
@@ -102,626 +72,220 @@
             if (bounds_group.getLayers().length) {
                 map.fitBounds(bounds_group.getBounds());
             }
-            map.setMaxBounds(map.getBounds());
         }
         map.createPane('pane_OSMStandard_0');
-        map.getPane('pane_OSMStandard_0').style.zIndex = 400;
-        var layer_OSMStandard_0 = L.tileLayer('http://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        map.getPane('pane_OSMStandard_0').style.zIndex = 200;
+        var CartoCDN = L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
             pane: 'pane_OSMStandard_0',
             opacity: 1.0,
             attribution: '<a href="https://www.openstreetmap.org/copyright">© OpenStreetMap contributors, CC-BY-SA</a>',
             minZoom: 1,
-            maxZoom: 15,
+            maxZoom: 19,
             minNativeZoom: 0,
             maxNativeZoom: 19
         });
-        layer_OSMStandard_0;
-        function pop_Zbiornikiwodne_1(feature, layer) {
-            layer.on({
-                mouseout: function(e) {
-                    for (i in e.target._eventParents) {
-                        e.target._eventParents[i].resetStyle(e.target);
-                    }
-                    if (typeof layer.closePopup == 'function') {
-                        layer.closePopup();
-                    } else {
-                        layer.eachLayer(function(feature){
-                            feature.closePopup()
-                        });
-                    }
-                },
-                mouseover: highlightFeature,
-            });
-            var popupContent = '<table>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['osm_id'] !== null ? autolinker.link(feature.properties['osm_id'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['code'] !== null ? autolinker.link(feature.properties['code'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['fclass'] !== null ? autolinker.link(feature.properties['fclass'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2"><strong>name</strong><br />' + (feature.properties['name'] !== null ? autolinker.link(feature.properties['name'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                </table>';
-            layer.bindPopup(popupContent, {maxHeight: 400});
-        }
-        function style_Zbiornikiwodne_1_0(feature) {
-            var context = {
-                feature: feature,
-                variables: {}
-            };
-            // Start of if blocks and style check logic
-            if (exp_Zbiornikiwodne_1rule0_eval_expression(context)) {
-                  return {
-                pane: 'pane_Zbiornikiwodne_1',
-                stroke: false, 
-                fill: true,
-                fillOpacity: 1,
-                fillColor: 'rgba(211,232,243,1.0)',
-                interactive: true,
-            };
-                }
-                else if (exp_Zbiornikiwodne_1rule1_eval_expression(context)) {
-                  return {
-                pane: 'pane_Zbiornikiwodne_1',
-                stroke: false, 
-                fill: true,
-                fillOpacity: 1,
-                fillColor: 'rgba(211,232,243,1.0)',
-                interactive: true,
-            };
-                }
-            else {
-                return {fill: false, stroke: false};
-            }
-        }
-        function style_Zbiornikiwodne_1_1(feature) {
-            var context = {
-                feature: feature,
-                variables: {}
-            };
-            // Start of if blocks and style check logic
-            if (exp_Zbiornikiwodne_1rule0_eval_expression(context)) {
-                  return {
-                pane: 'pane_Zbiornikiwodne_1',
-                opacity: 1,
-                color: 'rgba(165,214,239,1.0)',
-                dashArray: '',
-                lineCap: 'round',
-                lineJoin: 'round',
-                weight: 76.0,
-                fillOpacity: 0,
-                interactive: true,
-            };
-                }
-                else if (exp_Zbiornikiwodne_1rule1_eval_expression(context)) {
-                  return {
-                pane: 'pane_Zbiornikiwodne_1',
-                interactive: true,
-            };
-                }
-            else {
-                return {fill: false, stroke: false};
-            }
-        }
-        map.createPane('pane_Zbiornikiwodne_1');
-        map.getPane('pane_Zbiornikiwodne_1').style.zIndex = 401;
-        map.getPane('pane_Zbiornikiwodne_1').style['mix-blend-mode'] = 'normal';
-        var layer_Zbiornikiwodne_1 = new L.geoJson.multiStyle(json_Zbiornikiwodne_1, {
-            attribution: '',
-            interactive: true,
-            dataVar: 'json_Zbiornikiwodne_1',
-            layerName: 'layer_Zbiornikiwodne_1',
-            pane: 'pane_Zbiornikiwodne_1',
-            onEachFeature: pop_Zbiornikiwodne_1,
-            styles: [style_Zbiornikiwodne_1_0,style_Zbiornikiwodne_1_1,]
+        
+        var OpenStreetMap = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         });
-        bounds_group.addLayer(layer_Zbiornikiwodne_1);
-        function pop_Ciekiwodne_2(feature, layer) {
-            layer.on({
-                mouseout: function(e) {
-                    for (i in e.target._eventParents) {
-                        e.target._eventParents[i].resetStyle(e.target);
-                    }
-                    if (typeof layer.closePopup == 'function') {
-                        layer.closePopup();
-                    } else {
-                        layer.eachLayer(function(feature){
-                            feature.closePopup()
-                        });
-                    }
-                },
-                mouseover: highlightFeature,
-            });
-            var popupContent = '<table>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['osm_id'] !== null ? autolinker.link(feature.properties['osm_id'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['code'] !== null ? autolinker.link(feature.properties['code'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['fclass'] !== null ? autolinker.link(feature.properties['fclass'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['width'] !== null ? autolinker.link(feature.properties['width'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['name'] !== null ? autolinker.link(feature.properties['name'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                </table>';
-            layer.bindPopup(popupContent, {maxHeight: 400});
-        }
 
-        function style_Ciekiwodne_2_0() {
-            return {
-                pane: 'pane_Ciekiwodne_2',
-                opacity: 1,
-                color: 'rgba(211,232,243,1.0)',
-                dashArray: '',
-                lineCap: 'round',
-                lineJoin: 'round',
-                weight: 38.0,
-                fillOpacity: 0,
-                interactive: true,
-            }
-        }
-        map.createPane('pane_Ciekiwodne_2');
-        map.getPane('pane_Ciekiwodne_2').style.zIndex = 402;
-        map.getPane('pane_Ciekiwodne_2').style['mix-blend-mode'] = 'normal';
-        var layer_Ciekiwodne_2 = new L.geoJson(json_Ciekiwodne_2, {
-            attribution: '',
-            interactive: true,
-            dataVar: 'json_Ciekiwodne_2',
-            layerName: 'layer_Ciekiwodne_2',
-            pane: 'pane_Ciekiwodne_2',
-            onEachFeature: pop_Ciekiwodne_2,
-            style: style_Ciekiwodne_2_0,
+        var CyclOSM = L.tileLayer('https://{s}.tile-cyclosm.openstreetmap.fr/cyclosm/{z}/{x}/{y}.png', {
+            maxZoom: 20,
+            attribution: '<a href="https://github.com/cyclosm/cyclosm-cartocss-style/releases" title="CyclOSM - Open Bicycle render">CyclOSM</a> | Map data: &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         });
-        bounds_group.addLayer(layer_Ciekiwodne_2);
-        function pop_Natura_3(feature, layer) {
-            layer.on({
-                mouseout: function(e) {
-                    for (i in e.target._eventParents) {
-                        e.target._eventParents[i].resetStyle(e.target);
-                    }
-                    if (typeof layer.closePopup == 'function') {
-                        layer.closePopup();
-                    } else {
-                        layer.eachLayer(function(feature){
-                            feature.closePopup()
-                        });
-                    }
-                },
-                mouseover: highlightFeature,
-            });
+
+        var OpenRailwayMap = L.tileLayer('https://{s}.tiles.openrailwaymap.org/standard/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+            attribution: 'Map data: &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors | Map style: &copy; <a href="https://www.OpenRailwayMap.org">OpenRailwayMap</a> (<a href="https://creativecommons.org/licenses/by-sa/3.0/">CC-BY-SA</a>)'
+        });
+
+        var WaymarkedTrails_hiking = L.tileLayer('https://tile.waymarkedtrails.org/hiking/{z}/{x}/{y}.png', {
+            maxZoom: 18,
+            attribution: 'Map data: &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors | Map style: &copy; <a href="https://waymarkedtrails.org">waymarkedtrails.org</a> (<a href="https://creativecommons.org/licenses/by-sa/3.0/">CC-BY-SA</a>)'
+        });
+        var WaymarkedTrails_cycling = L.tileLayer('https://tile.waymarkedtrails.org/cycling/{z}/{x}/{y}.png', {
+            maxZoom: 18,
+            attribution: 'Map data: &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors | Map style: &copy; <a href="https://waymarkedtrails.org">waymarkedtrails.org</a> (<a href="https://creativecommons.org/licenses/by-sa/3.0/">CC-BY-SA</a>)'
+        });
+
+        function style_Natura_1_0(feature) {
+            var context = {
+                feature: feature,
+                variables: {}
+            };
+            
+            // Define a dictionary with category names as keys and full icon URLs as values
+            var categoryIcons = {
+                'aquarium': 'legend/Natura_1_Fontannyźródłanaturalne0.png',
+                'water': 'legend/Natura_1_Fontannyźródłanaturalne0.png',
+                'spring': 'legend/Natura_1_Fontannyźródłanaturalne0.png',
+                'fountain': 'legend/Natura_1_Fontannyźródłanaturalne0.png',
+                'beach': 'legend/Natura_1_Plaże1.png',
+                'cave_entrance': 'legend/Natura_1_Jaskinie2.png',
+                'nature_reserve': 'legend/Natura_1_Parkiirezerwaty3.png',
+                'park': 'legend/Natura_1_Parkiirezerwaty3.png',
+                'peak': 'legend/Natura_1_Szczyty4.png',
+                'picnic_site': 'legend/Natura_1_Miejscapiknikowe5.png',
+                'wilderness_hut': 'legend/Natura_1_Chatywotoczeniunatury6.png',
+                'zoo': 'legend/Natura_1_Zoo7.png',
+                'default': 'legend/Natura_1_Miejscapiknikowe5.png'
+            };
+            
+            // Extract the category from the GeoJSON properties
+            var category = feature.properties.category; // Adjust this based on your actual GeoJSON structure
+            
+            // Define the icon URL based on the category, default to 'default' if not found
+            var iconUrl = categoryIcons[category] || categoryIcons['default'];
+            
+            // Define the icon
+            var icon = L.icon({
+                iconUrl: iconUrl,
+                iconSize: [28.5, 28.5]
+            });            
+        
+            return {
+                pane: 'pane_Natura_1',
+                rotationAngle: 0.0,
+                rotationOrigin: 'center center',
+                icon: icon,
+                interactive: true,
+            };
+        }
+        
+        function pop_Natura_1(feature, layer) {
             var popupContent = '<table>\
                     <tr>\
-                        <th scope="row">name</th>\
+                        <th scope="row">Nazwa: </th>\
                         <td>' + (feature.properties['name'] !== null ? autolinker.link(feature.properties['name'].toLocaleString()) : '') + '</td>\
                     </tr>\
                     <tr>\
                         <td colspan="2">' + (feature.properties['url'] !== null ? autolinker.link(feature.properties['url'].toLocaleString()) : '') + '</td>\
                     </tr>\
                     <tr>\
-                        <th scope="row">category</th>\
+                        <th scope="row">Kategoria: </th>\
                         <td>' + (feature.properties['category'] !== null ? autolinker.link(feature.properties['category'].toLocaleString()) : '') + '</td>\
                     </tr>\
                 </table>';
             layer.bindPopup(popupContent, {maxHeight: 400});
         }
-        function style_Natura_3_0(feature) {
-            var context = {
-                feature: feature,
-                variables: {}
-            };
-            // Start of if blocks and style check logic
-            if (exp_Natura_3rule0_eval_expression(context)) {
-                  return {
-                pane: 'pane_Natura_3',
-        rotationAngle: 0.0,
-        rotationOrigin: 'center center',
-        icon: L.icon({
-            iconUrl: 'markers/Natura_3.svg',
-            iconSize: [28.5, 28.5]
-        }),
-                interactive: true,
-            };
-                }
-                else if (exp_Natura_3rule1_eval_expression(context)) {
-                  return {
-                pane: 'pane_Natura_3',
-        rotationAngle: 0.0,
-        rotationOrigin: 'center center',
-        icon: L.icon({
-            iconUrl: 'markers/Natura_3.svg',
-            iconSize: [28.5, 28.5]
-        }),
-                interactive: true,
-            };
-                }
-                else if (exp_Natura_3rule2_eval_expression(context)) {
-                  return {
-                pane: 'pane_Natura_3',
-        rotationAngle: 0.0,
-        rotationOrigin: 'center center',
-        icon: L.icon({
-            iconUrl: 'markers/Natura_3.svg',
-            iconSize: [28.5, 28.5]
-        }),
-                interactive: true,
-            };
-                }
-                else if (exp_Natura_3rule3_eval_expression(context)) {
-                  return {
-                pane: 'pane_Natura_3',
-        rotationAngle: 0.0,
-        rotationOrigin: 'center center',
-        icon: L.icon({
-            iconUrl: 'markers/Natura_3.svg',
-            iconSize: [28.5, 28.5]
-        }),
-                interactive: true,
-            };
-                }
-                else if (exp_Natura_3rule4_eval_expression(context)) {
-                  return {
-                pane: 'pane_Natura_3',
-        rotationAngle: 0.0,
-        rotationOrigin: 'center center',
-        icon: L.icon({
-            iconUrl: 'markers/Natura_3.svg',
-            iconSize: [28.5, 28.5]
-        }),
-                interactive: true,
-            };
-                }
-                else if (exp_Natura_3rule5_eval_expression(context)) {
-                  return {
-                pane: 'pane_Natura_3',
-        rotationAngle: 0.0,
-        rotationOrigin: 'center center',
-        icon: L.icon({
-            iconUrl: 'markers/Natura_3.svg',
-            iconSize: [28.5, 28.5]
-        }),
-                interactive: true,
-            };
-                }
-                else if (exp_Natura_3rule6_eval_expression(context)) {
-                  return {
-                pane: 'pane_Natura_3',
-        rotationAngle: 0.0,
-        rotationOrigin: 'center center',
-        icon: L.icon({
-            iconUrl: 'markers/Natura_3.svg',
-            iconSize: [28.5, 28.5]
-        }),
-                interactive: true,
-            };
-                }
-                else if (exp_Natura_3rule7_eval_expression(context)) {
-                  return {
-                pane: 'pane_Natura_3',
-        rotationAngle: 0.0,
-        rotationOrigin: 'center center',
-        icon: L.icon({
-            iconUrl: 'markers/Natura_3.svg',
-            iconSize: [28.5, 28.5]
-        }),
-                interactive: true,
-            };
-                }
-            else {
-                return {fill: false, stroke: false};
-            }
-        }
-        map.createPane('pane_Natura_3');
-        map.getPane('pane_Natura_3').style.zIndex = 403;
-        map.getPane('pane_Natura_3').style['mix-blend-mode'] = 'normal';
-        var layer_Natura_3 = new L.geoJson(json_Natura_3, {
+        
+        map.createPane('pane_Natura_1');
+        map.getPane('pane_Natura_1').style.zIndex = 401;
+        map.getPane('pane_Natura_1').style['mix-blend-mode'] = 'normal';
+        
+        var layer_Natura_1 = new L.geoJson(json_Natura_1, {
             attribution: '',
             interactive: true,
-            dataVar: 'json_Natura_3',
-            layerName: 'layer_Natura_3',
-            pane: 'pane_Natura_3',
-            onEachFeature: pop_Natura_3,
+            dataVar: 'json_Natura_1',
+            layerName: 'layer_Natura_1',
+            pane: 'pane_Natura_1',
+            onEachFeature: pop_Natura_1,
             pointToLayer: function (feature, latlng) {
-                var context = {
-                    feature: feature,
-                    variables: {}
-                };
-                return L.marker(latlng, style_Natura_3_0(feature));
+                return L.marker(latlng, style_Natura_1_0(feature));
             },
         });
-        var cluster_Natura_3 = new L.MarkerClusterGroup({showCoverageOnHover: false,
-            spiderfyDistanceMultiplier: 2});
-        cluster_Natura_3.addLayer(layer_Natura_3);
-
-        bounds_group.addLayer(layer_Natura_3);
-        function pop_SchronienieiZakwaterowanie_4(feature, layer) {
-            layer.on({
-                mouseout: function(e) {
-                    for (i in e.target._eventParents) {
-                        e.target._eventParents[i].resetStyle(e.target);
-                    }
-                    if (typeof layer.closePopup == 'function') {
-                        layer.closePopup();
-                    } else {
-                        layer.eachLayer(function(feature){
-                            feature.closePopup()
-                        });
-                    }
-                },
-                mouseover: highlightFeature,
-            });
+        
+        var cluster_Natura_1 = new L.MarkerClusterGroup({showCoverageOnHover: false, spiderfyDistanceMultiplier: 2});
+        cluster_Natura_1.addLayer(layer_Natura_1);
+        
+        bounds_group.addLayer(layer_Natura_1);
+        
+        function pop_Inne_2(feature, layer) {
             var popupContent = '<table>\
                     <tr>\
-                        <th scope="row">name</th>\
+                        <th scope="row">Nazwa: </th>\
                         <td>' + (feature.properties['name'] !== null ? autolinker.link(feature.properties['name'].toLocaleString()) : '') + '</td>\
                     </tr>\
                     <tr>\
-                        <th scope="row">url</th>\
-                        <td>' + (feature.properties['url'] !== null ? autolinker.link(feature.properties['url'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2"><strong>category</strong><br />' + (feature.properties['category'] !== null ? autolinker.link(feature.properties['category'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                </table>';
-            layer.bindPopup(popupContent, {maxHeight: 400});
-        }
-        function style_SchronienieiZakwaterowanie_4_0(feature) {
-            var context = {
-                feature: feature,
-                variables: {}
-            };
-            // Start of if blocks and style check logic
-            if (exp_SchronienieiZakwaterowanie_4rule0_eval_expression(context)) {
-                  return {
-                pane: 'pane_SchronienieiZakwaterowanie_4',
-        rotationAngle: 0.0,
-        rotationOrigin: 'center center',
-        icon: L.icon({
-            iconUrl: 'markers/SchronienieiZakwaterowanie_4.svg',
-            iconSize: [28.5, 28.5]
-        }),
-                interactive: true,
-            };
-                }
-                else if (exp_SchronienieiZakwaterowanie_4rule1_eval_expression(context)) {
-                  return {
-                pane: 'pane_SchronienieiZakwaterowanie_4',
-        rotationAngle: 0.0,
-        rotationOrigin: 'center center',
-        icon: L.icon({
-            iconUrl: 'markers/SchronienieiZakwaterowanie_4.svg',
-            iconSize: [28.5, 28.5]
-        }),
-                interactive: true,
-            };
-                }
-                else if (exp_SchronienieiZakwaterowanie_4rule2_eval_expression(context)) {
-                  return {
-                pane: 'pane_SchronienieiZakwaterowanie_4',
-        rotationAngle: 0.0,
-        rotationOrigin: 'center center',
-        icon: L.icon({
-            iconUrl: 'markers/SchronienieiZakwaterowanie_4.svg',
-            iconSize: [28.5, 28.5]
-        }),
-                interactive: true,
-            };
-                }
-                else if (exp_SchronienieiZakwaterowanie_4rule3_eval_expression(context)) {
-                  return {
-                pane: 'pane_SchronienieiZakwaterowanie_4',
-        rotationAngle: 0.0,
-        rotationOrigin: 'center center',
-        icon: L.icon({
-            iconUrl: 'markers/SchronienieiZakwaterowanie_4.svg',
-            iconSize: [28.5, 28.5]
-        }),
-                interactive: true,
-            };
-                }
-            else {
-                return {fill: false, stroke: false};
-            }
-        }
-        map.createPane('pane_SchronienieiZakwaterowanie_4');
-        map.getPane('pane_SchronienieiZakwaterowanie_4').style.zIndex = 404;
-        map.getPane('pane_SchronienieiZakwaterowanie_4').style['mix-blend-mode'] = 'normal';
-        var layer_SchronienieiZakwaterowanie_4 = new L.geoJson(json_SchronienieiZakwaterowanie_4, {
-            attribution: '',
-            interactive: true,
-            dataVar: 'json_SchronienieiZakwaterowanie_4',
-            layerName: 'layer_SchronienieiZakwaterowanie_4',
-            pane: 'pane_SchronienieiZakwaterowanie_4',
-            onEachFeature: pop_SchronienieiZakwaterowanie_4,
-            pointToLayer: function (feature, latlng) {
-                var context = {
-                    feature: feature,
-                    variables: {}
-                };
-                return L.marker(latlng, style_SchronienieiZakwaterowanie_4_0(feature));
-            },
-        });
-        var cluster_SchronienieiZakwaterowanie_4 = new L.MarkerClusterGroup({showCoverageOnHover: false,
-            spiderfyDistanceMultiplier: 2});
-        cluster_SchronienieiZakwaterowanie_4.addLayer(layer_SchronienieiZakwaterowanie_4);
-
-        bounds_group.addLayer(layer_SchronienieiZakwaterowanie_4);
-        function pop_Inne_5(feature, layer) {
-            layer.on({
-                mouseout: function(e) {
-                    for (i in e.target._eventParents) {
-                        e.target._eventParents[i].resetStyle(e.target);
-                    }
-                    if (typeof layer.closePopup == 'function') {
-                        layer.closePopup();
-                    } else {
-                        layer.eachLayer(function(feature){
-                            feature.closePopup()
-                        });
-                    }
-                },
-                mouseover: highlightFeature,
-            });
-            var popupContent = '<table>\
-                    <tr>\
-                        <th scope="row">name</th>\
-                        <td>' + (feature.properties['name'] !== null ? autolinker.link(feature.properties['name'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <th scope="row">opening_hours</th>\
+                        <th scope="row">Godziny otwarcia: </th>\
                         <td>' + (feature.properties['opening_hours'] !== null ? autolinker.link(feature.properties['opening_hours'].toLocaleString()) : '') + '</td>\
                     </tr>\
                     <tr>\
-                        <th scope="row">url</th>\
+                        <th scope="row">Adres Url: </th>\
                         <td>' + (feature.properties['url'] !== null ? autolinker.link(feature.properties['url'].toLocaleString()) : '') + '</td>\
                     </tr>\
                     <tr>\
-                        <td colspan="2"><strong>category</strong><br />' + (feature.properties['category'] !== null ? autolinker.link(feature.properties['category'].toLocaleString()) : '') + '</td>\
+                        <td colspan="2"><strong>Kategoria: </strong><br />' + (feature.properties['category'] !== null ? autolinker.link(feature.properties['category'].toLocaleString()) : '') + '</td>\
                     </tr>\
                 </table>';
             layer.bindPopup(popupContent, {maxHeight: 400});
         }
-        function style_Inne_5_0(feature) {
+        // Słownik URL-ów ikon w zależności od kategorii
+        var categoryMarkerUrls = {
+            'mill': 'legend/Inne_2_Budynkiwieże1.png',
+            'theme_park': 'legend/Inne_2_Parkirozrywki6.png',
+            'building': 'legend/Inne_2_Budynkiwieże1.png',
+            'wayside_chapel': 'legend/Inne_2_Miejscareligijne5.png',
+            'church': 'legend/Inne_2_Miejscareligijne5.png',
+            'place_of_worship': 'legend/Inne_2_Miejscareligijne5.png',
+            'information': 'legend/Inne_2_Punktyinformacyjne3.png',
+            'protected_building': 'legend/Inne_2_Budynkiwieże1.png',
+            'hunting_lodge': 'legend/Inne_2_Miejsaschronuzwierząt2.png',
+            'wayside_cross': 'legend/Inne_2_Miejscareligijne5.png',
+            'pillory': 'legend/Inne_2_Kolumny4.png',
+            'wayside_shrine': 'legend/Inne_2_Miejscareligijne5.png',
+            'chapel': 'legend/Inne_2_Miejscareligijne5.png',
+            'tower': 'legend/Inne_2_Budynkiwieże1.png',
+            'cemetery': 'legend/Inne_2_Miejscareligijne5.png',
+            'game_feeding;shelter': 'legend/Inne_2_Miejsaschronuzwierząt2.png',
+            'manor': 'legend/Inne_2_Miejscareligijne5.png',
+            'bench': 'legend/Inne_2_Ławka0.png',
+        };
+
+        function style_Inne_2_0(feature) {
             var context = {
                 feature: feature,
                 variables: {}
             };
-            // Start of if blocks and style check logic
-            if (exp_Inne_5rule0_eval_expression(context)) {
-                  return {
-                pane: 'pane_Inne_5',
-        rotationAngle: 0.0,
-        rotationOrigin: 'center center',
-        icon: L.icon({
-            iconUrl: 'markers/Inne_5.svg',
-            iconSize: [28.5, 28.5]
-        }),
+
+            // Extract the category from the GeoJSON properties
+            var category = feature.properties.category; // Dostosuj to do struktury Twojego GeoJSON
+
+            // Define the icon URL based on the category, default to 'markers/Inne_2.svg' if not found
+            var iconUrl = categoryMarkerUrls[category] || 'markers/Inne_2.svg';
+
+            return {
+                pane: 'pane_Inne_2',
+                rotationAngle: 0.0,
+                rotationOrigin: 'center center',
+                icon: L.icon({
+                    iconUrl: iconUrl,
+                    iconSize: [28.5, 28.5]
+                }),
                 interactive: true,
             };
-                }
-                else if (exp_Inne_5rule1_eval_expression(context)) {
-                  return {
-                pane: 'pane_Inne_5',
-        rotationAngle: 0.0,
-        rotationOrigin: 'center center',
-        icon: L.icon({
-            iconUrl: 'markers/Inne_5.svg',
-            iconSize: [28.5, 28.5]
-        }),
-                interactive: true,
-            };
-                }
-                else if (exp_Inne_5rule2_eval_expression(context)) {
-                  return {
-                pane: 'pane_Inne_5',
-        rotationAngle: 0.0,
-        rotationOrigin: 'center center',
-        icon: L.icon({
-            iconUrl: 'markers/Inne_5.svg',
-            iconSize: [28.5, 28.5]
-        }),
-                interactive: true,
-            };
-                }
-                else if (exp_Inne_5rule3_eval_expression(context)) {
-                  return {
-                pane: 'pane_Inne_5',
-        rotationAngle: 0.0,
-        rotationOrigin: 'center center',
-        icon: L.icon({
-            iconUrl: 'markers/Inne_5.svg',
-            iconSize: [28.5, 28.5]
-        }),
-                interactive: true,
-            };
-                }
-                else if (exp_Inne_5rule4_eval_expression(context)) {
-                  return {
-                pane: 'pane_Inne_5',
-        rotationAngle: 0.0,
-        rotationOrigin: 'center center',
-        icon: L.icon({
-            iconUrl: 'markers/Inne_5.svg',
-            iconSize: [28.5, 28.5]
-        }),
-                interactive: true,
-            };
-                }
-                else if (exp_Inne_5rule5_eval_expression(context)) {
-                  return {
-                pane: 'pane_Inne_5',
-        rotationAngle: 0.0,
-        rotationOrigin: 'center center',
-        icon: L.icon({
-            iconUrl: 'markers/Inne_5.svg',
-            iconSize: [28.5, 28.5]
-        }),
-                interactive: true,
-            };
-                }
-                else if (exp_Inne_5rule6_eval_expression(context)) {
-                  return {
-                pane: 'pane_Inne_5',
-        rotationAngle: 0.0,
-        rotationOrigin: 'center center',
-        icon: L.icon({
-            iconUrl: 'markers/Inne_5.svg',
-            iconSize: [28.5, 28.5]
-        }),
-                interactive: true,
-            };
-                }
-            else {
-                return {fill: false, stroke: false};
-            }
         }
-        map.createPane('pane_Inne_5');
-        map.getPane('pane_Inne_5').style.zIndex = 405;
-        map.getPane('pane_Inne_5').style['mix-blend-mode'] = 'normal';
-        var layer_Inne_5 = new L.geoJson(json_Inne_5, {
+
+        map.createPane('pane_Inne_2');
+        map.getPane('pane_Inne_2').style.zIndex = 402;
+        map.getPane('pane_Inne_2').style['mix-blend-mode'] = 'normal';
+
+        var layer_Inne_2 = new L.geoJson(json_Inne_2, {
             attribution: '',
             interactive: true,
-            dataVar: 'json_Inne_5',
-            layerName: 'layer_Inne_5',
-            pane: 'pane_Inne_5',
-            onEachFeature: pop_Inne_5,
+            dataVar: 'json_Inne_2',
+            layerName: 'layer_Inne_2',
+            pane: 'pane_Inne_2',
+            onEachFeature: pop_Inne_2,
             pointToLayer: function (feature, latlng) {
                 var context = {
                     feature: feature,
                     variables: {}
                 };
-                return L.marker(latlng, style_Inne_5_0(feature));
+                return L.marker(latlng, style_Inne_2_0(feature));
             },
         });
-        var cluster_Inne_5 = new L.MarkerClusterGroup({showCoverageOnHover: false,
-            spiderfyDistanceMultiplier: 2});
-        cluster_Inne_5.addLayer(layer_Inne_5);
 
-        bounds_group.addLayer(layer_Inne_5);
-        function pop_Inne_6(feature, layer) {
-            layer.on({
-                mouseout: function(e) {
-                    for (i in e.target._eventParents) {
-                        e.target._eventParents[i].resetStyle(e.target);
-                    }
-                    if (typeof layer.closePopup == 'function') {
-                        layer.closePopup();
-                    } else {
-                        layer.eachLayer(function(feature){
-                            feature.closePopup()
-                        });
-                    }
-                },
-                mouseover: highlightFeature,
-            });
+        var cluster_Inne_2 = new L.MarkerClusterGroup({
+            showCoverageOnHover: false,
+            spiderfyDistanceMultiplier: 2
+        });
+
+        cluster_Inne_2.addLayer(layer_Inne_2);
+        bounds_group.addLayer(layer_Inne_2);
+
+        function pop_Inne_3(feature, layer) {
             var popupContent = '<table>\
                     <tr>\
                         <th scope="row">name</th>\
@@ -737,15 +301,15 @@
                 </table>';
             layer.bindPopup(popupContent, {maxHeight: 400});
         }
-        function style_Inne_6_0(feature) {
+        function style_Inne_4_0(feature) {
             var context = {
                 feature: feature,
                 variables: {}
             };
             // Start of if blocks and style check logic
-            if (exp_Inne_6rule0_eval_expression(context)) {
+            if (exp_Inne_3rule0_eval_expression(context)) {
                   return {
-                pane: 'pane_Inne_6',
+                pane: 'pane_Inne_3',
                 opacity: 1,
                 color: 'rgba(35,35,35,1.0)',
                 dashArray: '10,5',
@@ -758,9 +322,9 @@
                 interactive: true,
             };
                 }
-                else if (exp_Inne_6rule1_eval_expression(context)) {
+                else if (exp_Inne_3rule1_eval_expression(context)) {
                   return {
-                pane: 'pane_Inne_6',
+                pane: 'pane_Inne_3',
                 opacity: 1,
                 color: 'rgba(31,120,180,1.0)',
                 dashArray: '10,5',
@@ -777,161 +341,191 @@
                 return {fill: false, stroke: false};
             }
         }
-        map.createPane('pane_Inne_6');
-        map.getPane('pane_Inne_6').style.zIndex = 406;
-        map.getPane('pane_Inne_6').style['mix-blend-mode'] = 'normal';
-        var layer_Inne_6 = new L.geoJson(json_Inne_6, {
+        map.createPane('pane_Inne_3');
+        map.getPane('pane_Inne_3').style.zIndex = 403;
+        map.getPane('pane_Inne_3').style['mix-blend-mode'] = 'normal';
+        var layer_Inne_3 = new L.geoJson(json_Inne_3, {
             attribution: '',
             interactive: true,
-            dataVar: 'json_Inne_6',
-            layerName: 'layer_Inne_6',
-            pane: 'pane_Inne_6',
-            onEachFeature: pop_Inne_6,
-            style: style_Inne_6_0,
+            dataVar: 'json_Inne_3',
+            layerName: 'layer_Inne_3',
+            pane: 'pane_Inne_3',
+            onEachFeature: pop_Inne_3,
+            style: style_Inne_4_0,
         });
-        bounds_group.addLayer(layer_Inne_6);
-        function pop_Odpoczynek_7(feature, layer) {
-            layer.on({
-                mouseout: function(e) {
-                    for (i in e.target._eventParents) {
-                        e.target._eventParents[i].resetStyle(e.target);
-                    }
-                    if (typeof layer.closePopup == 'function') {
-                        layer.closePopup();
-                    } else {
-                        layer.eachLayer(function(feature){
-                            feature.closePopup()
-                        });
-                    }
-                },
-                mouseover: highlightFeature,
-            });
+        bounds_group.addLayer(layer_Inne_3);
+        function pop_SchronienieiZakwaterowanie_4(feature, layer) {
             var popupContent = '<table>\
                     <tr>\
-                        <th scope="row">name</th>\
+                        <th scope="row">Nazwa: </th>\
                         <td>' + (feature.properties['name'] !== null ? autolinker.link(feature.properties['name'].toLocaleString()) : '') + '</td>\
                     </tr>\
                     <tr>\
-                        <th scope="row">opening_hours</th>\
-                        <td>' + (feature.properties['opening_hours'] !== null ? autolinker.link(feature.properties['opening_hours'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <th scope="row">url</th>\
+                        <th scope="row">Adres Url: </th>\
                         <td>' + (feature.properties['url'] !== null ? autolinker.link(feature.properties['url'].toLocaleString()) : '') + '</td>\
                     </tr>\
                     <tr>\
-                        <td colspan="2"><strong>category</strong><br />' + (feature.properties['category'] !== null ? autolinker.link(feature.properties['category'].toLocaleString()) : '') + '</td>\
+                        <td colspan="2"><strong>Kategoria: </strong><br />' + (feature.properties['category'] !== null ? autolinker.link(feature.properties['category'].toLocaleString()) : '') + '</td>\
                     </tr>\
                 </table>';
             layer.bindPopup(popupContent, {maxHeight: 400});
         }
-        function style_Odpoczynek_7_0(feature) {
+        
+        function style_SchronienieiZakwaterowanie_2_0(feature) {
             var context = {
                 feature: feature,
                 variables: {}
             };
-            // Start of if blocks and style check logic
-            if (exp_Odpoczynek_7rule0_eval_expression(context)) {
-                  return {
-                pane: 'pane_Odpoczynek_7',
-        rotationAngle: 0.0,
-        rotationOrigin: 'center center',
-        icon: L.icon({
-            iconUrl: 'markers/Odpoczynek_7.svg',
-            iconSize: [28.5, 28.5]
-        }),
-                interactive: true,
-            };
-                }
-                else if (exp_Odpoczynek_7rule1_eval_expression(context)) {
-                  return {
-                pane: 'pane_Odpoczynek_7',
-        rotationAngle: 0.0,
-        rotationOrigin: 'center center',
-        icon: L.icon({
-            iconUrl: 'markers/Odpoczynek_7.svg',
-            iconSize: [28.5, 28.5]
-        }),
-                interactive: true,
-            };
-                }
-                else if (exp_Odpoczynek_7rule2_eval_expression(context)) {
-                  return {
-                pane: 'pane_Odpoczynek_7',
-        rotationAngle: 0.0,
-        rotationOrigin: 'center center',
-        icon: L.icon({
-            iconUrl: 'markers/Odpoczynek_7.svg',
-            iconSize: [28.5, 28.5]
-        }),
-                interactive: true,
-            };
-                }
-                else if (exp_Odpoczynek_7rule3_eval_expression(context)) {
-                  return {
-                pane: 'pane_Odpoczynek_7',
-        rotationAngle: 0.0,
-        rotationOrigin: 'center center',
-        icon: L.icon({
-            iconUrl: 'markers/Odpoczynek_7.svg',
-            iconSize: [28.5, 28.5]
-        }),
-                interactive: true,
-            };
-                }
-            else {
-                return {fill: false, stroke: false};
+            
+            var categoryMarkerUrls = {
+                'camp_site': 'legend/SchronienieiZakwaterowanie_4_Kempingi0.png',
+                'caravan_site': 'legend/SchronienieiZakwaterowanie_4_Miejscapostojukamperów1.png',
+                'motel': 'legend/SchronienieiZakwaterowanie_4_Zakwaterowania2.png',
+                'hotel': 'legend/SchronienieiZakwaterowanie_4_Zakwaterowania2.png',
+                'hostel': 'legend/SchronienieiZakwaterowanie_4_Zakwaterowania2.png',
+                'guest_house': 'legend/SchronienieiZakwaterowanie_4_Zakwaterowania2.png',
+                'chalet': 'legend/SchronienieiZakwaterowanie_4_Zakwaterowania2.png',
+                'shelter': 'legend/SchronienieiZakwaterowanie_4_Schronienei3.png',
+                'alpine_hut': 'legend/SchronienieiZakwaterowanie_4_Schronienei3.png',
             }
+            // Extract the category from the GeoJSON properties
+            var category = feature.properties.category; // Dostosuj to do struktury Twojego GeoJSON
+
+            // Define the icon URL based on the category, default to 'markers/SchronienieiZakwaterowanie_4.svg' if not found
+            var iconUrl = categoryMarkerUrls[category] || 'markers/SchronienieiZakwaterowanie_4.svg';
+
+            return {
+                pane: 'pane_SchronienieiZakwaterowanie_4',
+                rotationAngle: 0.0,
+                rotationOrigin: 'center center',
+                icon: L.icon({
+                    iconUrl: iconUrl,
+                    iconSize: [28.5, 28.5]
+                }),
+                interactive: true,
+            };
         }
-        map.createPane('pane_Odpoczynek_7');
-        map.getPane('pane_Odpoczynek_7').style.zIndex = 407;
-        map.getPane('pane_Odpoczynek_7').style['mix-blend-mode'] = 'normal';
-        var layer_Odpoczynek_7 = new L.geoJson(json_Odpoczynek_7, {
+
+        map.createPane('pane_SchronienieiZakwaterowanie_4');
+        map.getPane('pane_SchronienieiZakwaterowanie_4').style.zIndex = 404;
+        map.getPane('pane_SchronienieiZakwaterowanie_4').style['mix-blend-mode'] = 'normal';
+
+        var layer_SchronienieiZakwaterowanie_4 = new L.geoJson(json_SchronienieiZakwaterowanie_4, {
             attribution: '',
             interactive: true,
-            dataVar: 'json_Odpoczynek_7',
-            layerName: 'layer_Odpoczynek_7',
-            pane: 'pane_Odpoczynek_7',
-            onEachFeature: pop_Odpoczynek_7,
+            dataVar: 'json_SchronienieiZakwaterowanie_4',
+            layerName: 'layer_SchronienieiZakwaterowanie_4',
+            pane: 'pane_SchronienieiZakwaterowanie_4',
+            onEachFeature: pop_SchronienieiZakwaterowanie_4,
             pointToLayer: function (feature, latlng) {
                 var context = {
                     feature: feature,
                     variables: {}
                 };
-                return L.marker(latlng, style_Odpoczynek_7_0(feature));
+                return L.marker(latlng, style_SchronienieiZakwaterowanie_2_0(feature));
             },
         });
-        var cluster_Odpoczynek_7 = new L.MarkerClusterGroup({showCoverageOnHover: false,
-            spiderfyDistanceMultiplier: 2});
-        cluster_Odpoczynek_7.addLayer(layer_Odpoczynek_7);
 
-        bounds_group.addLayer(layer_Odpoczynek_7);
-        function pop_Sztuka_8(feature, layer) {
-            layer.on({
-                mouseout: function(e) {
-                    for (i in e.target._eventParents) {
-                        e.target._eventParents[i].resetStyle(e.target);
-                    }
-                    if (typeof layer.closePopup == 'function') {
-                        layer.closePopup();
-                    } else {
-                        layer.eachLayer(function(feature){
-                            feature.closePopup()
-                        });
-                    }
-                },
-                mouseover: highlightFeature,
-            });
+        var cluster_SchronienieiZakwaterowanie_4 = new L.MarkerClusterGroup({
+            showCoverageOnHover: false,
+            spiderfyDistanceMultiplier: 2
+        });
+
+        cluster_SchronienieiZakwaterowanie_4.addLayer(layer_SchronienieiZakwaterowanie_4);
+        bounds_group.addLayer(layer_SchronienieiZakwaterowanie_4);
+
+        function pop_Odpoczynek_5(feature, layer) {
             var popupContent = '<table>\
                     <tr>\
-                        <th scope="row">name</th>\
+                        <th scope="row">Nazwa: </th>\
                         <td>' + (feature.properties['name'] !== null ? autolinker.link(feature.properties['name'].toLocaleString()) : '') + '</td>\
                     </tr>\
                     <tr>\
-                        <td colspan="2"><strong>tourism</strong><br />' + (feature.properties['tourism'] !== null ? autolinker.link(feature.properties['tourism'].toLocaleString()) : '') + '</td>\
+                        <th scope="row">Godziny otwarcia: </th>\
+                        <td>' + (feature.properties['opening_hours'] !== null ? autolinker.link(feature.properties['opening_hours'].toLocaleString()) : '') + '</td>\
                     </tr>\
                     <tr>\
-                        <th scope="row">url</th>\
+                        <th scope="row">Adres Url: </th>\
+                        <td>' + (feature.properties['url'] !== null ? autolinker.link(feature.properties['url'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2"><strong>Kategoria: </strong><br />' + (feature.properties['category'] !== null ? autolinker.link(feature.properties['category'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+        // Słownik URL-ów ikon w zależności od kategorii
+        
+        function style_Odpoczynek_5_0(feature) {
+            var context = {
+                feature: feature,
+                variables: {}
+            };
+            
+            var categoryMarkerUrls = {
+                'toilets': 'legend/Odpoczynek_5_Toalety3.png',
+                'drinking_water': 'legend/Odpoczynek_5_Wodapitna1.png',
+                'restaurant': 'legend/Odpoczynek_5_Restauracje2.png',
+                'picnic_site': 'legend/Odpoczynek_5_Kawiarnie0.png',
+                'cafe': 'legend/Odpoczynek_5_Kawiarnie0.png',
+            };
+            // Extract the category from the GeoJSON properties
+            var category = feature.properties.category; // Dostosuj to do struktury Twojego GeoJSON
+
+            // Define the icon URL based on the category, default to 'markers/Odpoczynek_5.svg' if not found
+            var iconUrl = categoryMarkerUrls[category] || 'Odpoczynek_6_Toalety3.png';
+
+            return {
+                pane: 'pane_Odpoczynek_5',
+                rotationAngle: 0.0,
+                rotationOrigin: 'center center',
+                icon: L.icon({
+                    iconUrl: iconUrl,
+                    iconSize: [28.5, 28.5]
+                }),
+                interactive: true,
+            };
+        }
+
+        map.createPane('pane_Odpoczynek_5');
+        map.getPane('pane_Odpoczynek_5').style.zIndex = 405;
+        map.getPane('pane_Odpoczynek_5').style['mix-blend-mode'] = 'normal';
+
+        var layer_Odpoczynek_5 = new L.geoJson(json_Odpoczynek_5, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_Odpoczynek_5',
+            layerName: 'layer_Odpoczynek_5',
+            pane: 'pane_Odpoczynek_5',
+            onEachFeature: pop_Odpoczynek_5,
+            pointToLayer: function (feature, latlng) {
+                var context = {
+                    feature: feature,
+                    variables: {}
+                };
+                return L.marker(latlng, style_Odpoczynek_5_0(feature));
+            },
+        });
+
+        var cluster_Odpoczynek_5 = new L.MarkerClusterGroup({
+            showCoverageOnHover: false,
+            spiderfyDistanceMultiplier: 2
+        });
+
+        cluster_Odpoczynek_5.addLayer(layer_Odpoczynek_5);
+        bounds_group.addLayer(layer_Odpoczynek_5);
+
+        function pop_Sztuka_6(feature, layer) {
+            var popupContent = '<table>\
+                    <tr>\
+                        <th scope="row">Nazwa: </th>\
+                        <td>' + (feature.properties['name'] !== null ? autolinker.link(feature.properties['name'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2"><strong>Kategoria: </strong><br />' + (feature.properties['tourism'] !== null ? autolinker.link(feature.properties['tourism'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Adres Url: </th>\
                         <td>' + (feature.properties['url'] !== null ? autolinker.link(feature.properties['url'].toLocaleString()) : '') + '</td>\
                     </tr>\
                     <tr>\
@@ -941,245 +535,160 @@
                         <td colspan="2">' + (feature.properties['url:1'] !== null ? autolinker.link(feature.properties['url:1'].toLocaleString()) : '') + '</td>\
                     </tr>\
                     <tr>\
-                        <th scope="row">artwork_type</th>\
+                        <th scope="row">Rodzaj sztuki: </th>\
                         <td>' + (feature.properties['artwork_type'] !== null ? autolinker.link(feature.properties['artwork_type'].toLocaleString()) : '') + '</td>\
                     </tr>\
                 </table>';
             layer.bindPopup(popupContent, {maxHeight: 400});
         }
-        function style_Sztuka_8_0(feature) {
+        
+        function style_Sztuka_6_0(feature) {
             var context = {
                 feature: feature,
                 variables: {}
             };
-            // Start of if blocks and style check logic
-            if (exp_Sztuka_8rule0_eval_expression(context)) {
-                  return {
-                pane: 'pane_Sztuka_8',
-        rotationAngle: 0.0,
-        rotationOrigin: 'center center',
-        icon: L.icon({
-            iconUrl: 'markers/Sztuka_8.svg',
-            iconSize: [28.5, 28.5]
-        }),
+            
+            var categoryMarkerUrls = {
+                'artwork': 'legend/Sztuka_6_Dziełasztuki3.png',
+                'attraction': 'legend/Sztuka_6_Atrakcje0.png',
+                'viewpoint': 'legend/Sztuka_6_Miejscawidokowe2.png',
+                'gallery': 'legend/Sztuka_6_Galerie1.png',
+            };
+
+            // Extract the category from the GeoJSON properties
+            var category = feature.properties.tourism; // Dostosuj to do struktury Twojego GeoJSON
+
+            // Define the icon URL based on the category, default to 'markers/Sztuka_6.svg' if not found
+            var iconUrl = categoryMarkerUrls[category] || 'markers/Sztuka_6.svg';
+
+            return {
+                pane: 'pane_Sztuka_6',
+                rotationAngle: 0.0,
+                rotationOrigin: 'center center',
+                icon: L.icon({
+                    iconUrl: iconUrl,
+                    iconSize: [28.5, 28.5]
+                }),
                 interactive: true,
             };
-                }
-                else if (exp_Sztuka_8rule1_eval_expression(context)) {
-                  return {
-                pane: 'pane_Sztuka_8',
-        rotationAngle: 0.0,
-        rotationOrigin: 'center center',
-        icon: L.icon({
-            iconUrl: 'markers/Sztuka_8.svg',
-            iconSize: [28.5, 28.5]
-        }),
-                interactive: true,
-            };
-                }
-                else if (exp_Sztuka_8rule2_eval_expression(context)) {
-                  return {
-                pane: 'pane_Sztuka_8',
-        rotationAngle: 0.0,
-        rotationOrigin: 'center center',
-        icon: L.icon({
-            iconUrl: 'markers/Sztuka_8.svg',
-            iconSize: [28.5, 28.5]
-        }),
-                interactive: true,
-            };
-                }
-                else if (exp_Sztuka_8rule3_eval_expression(context)) {
-                  return {
-                pane: 'pane_Sztuka_8',
-        rotationAngle: 0.0,
-        rotationOrigin: 'center center',
-        icon: L.icon({
-            iconUrl: 'markers/Sztuka_8.svg',
-            iconSize: [28.5, 28.5]
-        }),
-                interactive: true,
-            };
-                }
-            else {
-                return {fill: false, stroke: false};
-            }
         }
-        map.createPane('pane_Sztuka_8');
-        map.getPane('pane_Sztuka_8').style.zIndex = 408;
-        map.getPane('pane_Sztuka_8').style['mix-blend-mode'] = 'normal';
-        var layer_Sztuka_8 = new L.geoJson(json_Sztuka_8, {
+
+        map.createPane('pane_Sztuka_6');
+        map.getPane('pane_Sztuka_6').style.zIndex = 406;
+        map.getPane('pane_Sztuka_6').style['mix-blend-mode'] = 'normal';
+
+        var layer_Sztuka_6 = new L.geoJson(json_Sztuka_6, {
             attribution: '',
             interactive: true,
-            dataVar: 'json_Sztuka_8',
-            layerName: 'layer_Sztuka_8',
-            pane: 'pane_Sztuka_8',
-            onEachFeature: pop_Sztuka_8,
+            dataVar: 'json_Sztuka_6',
+            layerName: 'layer_Sztuka_6',
+            pane: 'pane_Sztuka_6',
+            onEachFeature: pop_Sztuka_6,
             pointToLayer: function (feature, latlng) {
                 var context = {
                     feature: feature,
                     variables: {}
                 };
-                return L.marker(latlng, style_Sztuka_8_0(feature));
+                return L.marker(latlng, style_Sztuka_6_0(feature));
             },
         });
-        var cluster_Sztuka_8 = new L.MarkerClusterGroup({showCoverageOnHover: false,
-            spiderfyDistanceMultiplier: 2});
-        cluster_Sztuka_8.addLayer(layer_Sztuka_8);
 
-        bounds_group.addLayer(layer_Sztuka_8);
-        function pop_MiejscaHistoryczne_9(feature, layer) {
-            layer.on({
-                mouseout: function(e) {
-                    for (i in e.target._eventParents) {
-                        e.target._eventParents[i].resetStyle(e.target);
-                    }
-                    if (typeof layer.closePopup == 'function') {
-                        layer.closePopup();
-                    } else {
-                        layer.eachLayer(function(feature){
-                            feature.closePopup()
-                        });
-                    }
-                },
-                mouseover: highlightFeature,
-            });
+        var cluster_Sztuka_6 = new L.MarkerClusterGroup({
+            showCoverageOnHover: false,
+            spiderfyDistanceMultiplier: 2
+        });
+
+        cluster_Sztuka_6.addLayer(layer_Sztuka_6);
+        bounds_group.addLayer(layer_Sztuka_6);
+
+        function pop_MiejscaHistoryczne_7(feature, layer) {
             var popupContent = '<table>\
                     <tr>\
-                        <th scope="row">historic</th>\
+                        <th scope="row">Rodzaj: </th>\
                         <td>' + (feature.properties['historic'] !== null ? autolinker.link(feature.properties['historic'].toLocaleString()) : '') + '</td>\
                     </tr>\
                     <tr>\
-                        <th scope="row">name</th>\
+                        <th scope="row">Nazwa: </th>\
                         <td>' + (feature.properties['name'] !== null ? autolinker.link(feature.properties['name'].toLocaleString()) : '') + '</td>\
                     </tr>\
                     <tr>\
-                        <td colspan="2"><strong>category</strong><br />' + (feature.properties['category'] !== null ? autolinker.link(feature.properties['category'].toLocaleString()) : '') + '</td>\
+                        <td colspan="2"><strong>Kategoria: </strong><br />' + (feature.properties['category'] !== null ? autolinker.link(feature.properties['category'].toLocaleString()) : '') + '</td>\
                     </tr>\
                 </table>';
             layer.bindPopup(popupContent, {maxHeight: 400});
         }
-        function style_MiejscaHistoryczne_9_0(feature) {
+        // Słownik URL-ów ikon w zależności od kategorii
+        
+        function style_MiejscaHistoryczne_7_0(feature) {
             var context = {
                 feature: feature,
                 variables: {}
             };
-            // Start of if blocks and style check logic
-            if (exp_MiejscaHistoryczne_9rule0_eval_expression(context)) {
-                  return {
-                pane: 'pane_MiejscaHistoryczne_9',
-        rotationAngle: 0.0,
-        rotationOrigin: 'center center',
-        icon: L.icon({
-            iconUrl: 'markers/MiejscaHistoryczne_9.svg',
-            iconSize: [28.5, 28.5]
-        }),
+            
+            var categoryMarkerUrls = {
+                'battlefield': 'legend/MiejscaHistoryczne_7_Miejscawybuchóworazpolawalki3.png',
+                'fort': 'legend/MiejscaHistoryczne_7_Fortyzamkiruinyimuryobronne4.png',
+                'bomb_crater': 'legend/MiejscaHistoryczne_7_Miejscawybuchóworazpolawalki3.png',
+                'museum': 'legend/MiejscaHistoryczne_7_Muzea1.png',
+                'palace': 'legend/MiejscaHistoryczne_7_Pałace2.png',
+                'city_gate': 'legend/MiejscaHistoryczne_7_Fortyzamkiruinyimuryobronne4.png',
+                'ruins': 'legend/MiejscaHistoryczne_7_Fortyzamkiruinyimuryobronne4.png',
+                'monument': 'legend/MiejscaHistoryczne_7_Miejscapamięcigrobowce5.png',
+                'castle': 'legend/MiejscaHistoryczne_7_Fortyzamkiruinyimuryobronne4.png',
+                'archaeological_site': 'legend/MiejscaHistoryczne_7_Wykopaliskaarcheologiczne0.png',
+                'heritage': 'legend/MiejscaHistoryczne_7_Miejscapamięcigrobowce5.png',
+                'memorial': 'legend/MiejscaHistoryczne_7_Miejscapamięcigrobowce5.png',
+                'citywalls': 'legend/MiejscaHistoryczne_7_Fortyzamkiruinyimuryobronne4.png',
+                'tomb': 'legend/MiejscaHistoryczne_7_Miejscapamięcigrobowce5.png',
+                'gate': 'legend/MiejscaHistoryczne_7_Fortyzamkiruinyimuryobronne4.png',
+            };
+            // Extract the category from the GeoJSON properties
+            var category = feature.properties.category; // Dostosuj to do struktury Twojego GeoJSON
+
+            // Define the icon URL based on the category, default to 'markers/MiejscaHistoryczne_7.svg' if not found
+            var iconUrl = categoryMarkerUrls[category] || 'markers/MiejscaHistoryczne_7.svg';
+
+            return {
+                pane: 'pane_MiejscaHistoryczne_7',
+                rotationAngle: 0.0,
+                rotationOrigin: 'center center',
+                icon: L.icon({
+                    iconUrl: iconUrl,
+                    iconSize: [28.5, 28.5]
+                }),
                 interactive: true,
             };
-                }
-                else if (exp_MiejscaHistoryczne_9rule1_eval_expression(context)) {
-                  return {
-                pane: 'pane_MiejscaHistoryczne_9',
-        rotationAngle: 0.0,
-        rotationOrigin: 'center center',
-        icon: L.icon({
-            iconUrl: 'markers/MiejscaHistoryczne_9.svg',
-            iconSize: [28.5, 28.5]
-        }),
-                interactive: true,
-            };
-                }
-                else if (exp_MiejscaHistoryczne_9rule2_eval_expression(context)) {
-                  return {
-                pane: 'pane_MiejscaHistoryczne_9',
-        rotationAngle: 0.0,
-        rotationOrigin: 'center center',
-        icon: L.icon({
-            iconUrl: 'markers/MiejscaHistoryczne_9.svg',
-            iconSize: [28.5, 28.5]
-        }),
-                interactive: true,
-            };
-                }
-                else if (exp_MiejscaHistoryczne_9rule3_eval_expression(context)) {
-                  return {
-                pane: 'pane_MiejscaHistoryczne_9',
-        rotationAngle: 0.0,
-        rotationOrigin: 'center center',
-        icon: L.icon({
-            iconUrl: 'markers/MiejscaHistoryczne_9.svg',
-            iconSize: [28.5, 28.5]
-        }),
-                interactive: true,
-            };
-                }
-                else if (exp_MiejscaHistoryczne_9rule4_eval_expression(context)) {
-                  return {
-                pane: 'pane_MiejscaHistoryczne_9',
-        rotationAngle: 0.0,
-        rotationOrigin: 'center center',
-        icon: L.icon({
-            iconUrl: 'markers/MiejscaHistoryczne_9.svg',
-            iconSize: [28.5, 28.5]
-        }),
-                interactive: true,
-            };
-                }
-                else if (exp_MiejscaHistoryczne_9rule5_eval_expression(context)) {
-                  return {
-                pane: 'pane_MiejscaHistoryczne_9',
-        rotationAngle: 0.0,
-        rotationOrigin: 'center center',
-        icon: L.icon({
-            iconUrl: 'markers/MiejscaHistoryczne_9.svg',
-            iconSize: [28.5, 28.5]
-        }),
-                interactive: true,
-            };
-                }
-            else {
-                return {fill: false, stroke: false};
-            }
         }
-        map.createPane('pane_MiejscaHistoryczne_9');
-        map.getPane('pane_MiejscaHistoryczne_9').style.zIndex = 409;
-        map.getPane('pane_MiejscaHistoryczne_9').style['mix-blend-mode'] = 'normal';
-        var layer_MiejscaHistoryczne_9 = new L.geoJson(json_MiejscaHistoryczne_9, {
+
+        map.createPane('pane_MiejscaHistoryczne_7');
+        map.getPane('pane_MiejscaHistoryczne_7').style.zIndex = 407;
+        map.getPane('pane_MiejscaHistoryczne_7').style['mix-blend-mode'] = 'normal';
+
+        var layer_MiejscaHistoryczne_7 = new L.geoJson(json_MiejscaHistoryczne_7, {
             attribution: '',
             interactive: true,
-            dataVar: 'json_MiejscaHistoryczne_9',
-            layerName: 'layer_MiejscaHistoryczne_9',
-            pane: 'pane_MiejscaHistoryczne_9',
-            onEachFeature: pop_MiejscaHistoryczne_9,
+            dataVar: 'json_MiejscaHistoryczne_7',
+            layerName: 'layer_MiejscaHistoryczne_7',
+            pane: 'pane_MiejscaHistoryczne_7',
+            onEachFeature: pop_MiejscaHistoryczne_7,
             pointToLayer: function (feature, latlng) {
                 var context = {
                     feature: feature,
                     variables: {}
                 };
-                return L.marker(latlng, style_MiejscaHistoryczne_9_0(feature));
+                return L.marker(latlng, style_MiejscaHistoryczne_7_0(feature));
             },
         });
-        var cluster_MiejscaHistoryczne_9 = new L.MarkerClusterGroup({showCoverageOnHover: false,
-            spiderfyDistanceMultiplier: 2});
-        cluster_MiejscaHistoryczne_9.addLayer(layer_MiejscaHistoryczne_9);
 
-        bounds_group.addLayer(layer_MiejscaHistoryczne_9);
-        function pop_MiejscaHistoryczne_10(feature, layer) {
-            layer.on({
-                mouseout: function(e) {
-                    for (i in e.target._eventParents) {
-                        e.target._eventParents[i].resetStyle(e.target);
-                    }
-                    if (typeof layer.closePopup == 'function') {
-                        layer.closePopup();
-                    } else {
-                        layer.eachLayer(function(feature){
-                            feature.closePopup()
-                        });
-                    }
-                },
-                mouseover: highlightFeature,
-            });
+        var cluster_MiejscaHistoryczne_7 = new L.MarkerClusterGroup({
+            showCoverageOnHover: false,
+            spiderfyDistanceMultiplier: 2
+        });
+
+        cluster_MiejscaHistoryczne_7.addLayer(layer_MiejscaHistoryczne_7);
+        bounds_group.addLayer(layer_MiejscaHistoryczne_7);
+
+        function pop_MiejscaHistoryczne_8(feature, layer) {
             var popupContent = '<table>\
                     <tr>\
                         <th scope="row">name</th>\
@@ -1191,15 +700,15 @@
                 </table>';
             layer.bindPopup(popupContent, {maxHeight: 400});
         }
-        function style_MiejscaHistoryczne_10_0(feature) {
+        function style_MiejscaHistoryczne_8_0(feature) {
             var context = {
                 feature: feature,
                 variables: {}
             };
             // Start of if blocks and style check logic
-            if (exp_MiejscaHistoryczne_10rule0_eval_expression(context)) {
+            if (exp_MiejscaHistoryczne_8rule0_eval_expression(context)) {
                   return {
-                pane: 'pane_MiejscaHistoryczne_10',
+                pane: 'pane_MiejscaHistoryczne_8',
                 opacity: 1,
                 color: 'rgba(248,120,47,1.0)',
                 dashArray: '',
@@ -1212,9 +721,9 @@
                 interactive: true,
             };
                 }
-                else if (exp_MiejscaHistoryczne_10rule1_eval_expression(context)) {
+                else if (exp_MiejscaHistoryczne_8rule1_eval_expression(context)) {
                   return {
-                pane: 'pane_MiejscaHistoryczne_10',
+                pane: 'pane_MiejscaHistoryczne_8',
                 opacity: 1,
                 color: 'rgba(255,0,0,1.0)',
                 dashArray: '',
@@ -1227,9 +736,9 @@
                 interactive: true,
             };
                 }
-                else if (exp_MiejscaHistoryczne_10rule2_eval_expression(context)) {
+                else if (exp_MiejscaHistoryczne_8rule2_eval_expression(context)) {
                   return {
-                pane: 'pane_MiejscaHistoryczne_10',
+                pane: 'pane_MiejscaHistoryczne_8',
                 stroke: false, 
                 fill: true,
                 fillOpacity: 1,
@@ -1237,9 +746,9 @@
                 interactive: true,
             };
                 }
-                else if (exp_MiejscaHistoryczne_10rule3_eval_expression(context)) {
+                else if (exp_MiejscaHistoryczne_8rule3_eval_expression(context)) {
                   return {
-                pane: 'pane_MiejscaHistoryczne_10',
+                pane: 'pane_MiejscaHistoryczne_8',
                 opacity: 1,
                 color: 'rgba(0,0,0,1.0)',
                 dashArray: '',
@@ -1256,35 +765,20 @@
                 return {fill: false, stroke: false};
             }
         }
-        map.createPane('pane_MiejscaHistoryczne_10');
-        map.getPane('pane_MiejscaHistoryczne_10').style.zIndex = 410;
-        map.getPane('pane_MiejscaHistoryczne_10').style['mix-blend-mode'] = 'normal';
-        var layer_MiejscaHistoryczne_10 = new L.geoJson(json_MiejscaHistoryczne_10, {
+        map.createPane('pane_MiejscaHistoryczne_8');
+        map.getPane('pane_MiejscaHistoryczne_8').style.zIndex = 408;
+        map.getPane('pane_MiejscaHistoryczne_8').style['mix-blend-mode'] = 'normal';
+        var layer_MiejscaHistoryczne_8 = new L.geoJson(json_MiejscaHistoryczne_8, {
             attribution: '',
             interactive: true,
-            dataVar: 'json_MiejscaHistoryczne_10',
-            layerName: 'layer_MiejscaHistoryczne_10',
-            pane: 'pane_MiejscaHistoryczne_10',
-            onEachFeature: pop_MiejscaHistoryczne_10,
-            style: style_MiejscaHistoryczne_10_0,
+            dataVar: 'json_MiejscaHistoryczne_8',
+            layerName: 'layer_MiejscaHistoryczne_8',
+            pane: 'pane_MiejscaHistoryczne_8',
+            onEachFeature: pop_MiejscaHistoryczne_8,
+            style: style_MiejscaHistoryczne_8_0,
         });
-        bounds_group.addLayer(layer_MiejscaHistoryczne_10);
-        function pop_ObiektyPRG_11(feature, layer) {
-            layer.on({
-                mouseout: function(e) {
-                    for (i in e.target._eventParents) {
-                        e.target._eventParents[i].resetStyle(e.target);
-                    }
-                    if (typeof layer.closePopup == 'function') {
-                        layer.closePopup();
-                    } else {
-                        layer.eachLayer(function(feature){
-                            feature.closePopup()
-                        });
-                    }
-                },
-                mouseover: highlightFeature,
-            });
+        bounds_group.addLayer(layer_MiejscaHistoryczne_8);
+        function pop_ObiektyPRG_9(feature, layer) {
             var popupContent = '<table>\
                     <tr>\
                         <td colspan="2">' + (feature.properties['fid'] !== null ? autolinker.link(feature.properties['fid'].toLocaleString()) : '') + '</td>\
@@ -1299,9 +793,9 @@
             layer.bindPopup(popupContent, {maxHeight: 400});
         }
 
-        function style_ObiektyPRG_11_0() {
+        function style_ObiektyPRG_9_0() {
             return {
-                pane: 'pane_ObiektyPRG_11',
+                pane: 'pane_ObiektyPRG_9',
                 opacity: 1,
                 color: 'rgba(4,4,4,0.06862745098039215)',
                 dashArray: '',
@@ -1311,12 +805,12 @@
                 fill: true,
                 fillOpacity: 1,
                 fillColor: 'rgba(0,0,255,0.0)',
-                interactive: true,
+                interactive: false,
             }
         }
-        function style_ObiektyPRG_11_1() {
+        function style_ObiektyPRG_9_1() {
             return {
-                pane: 'pane_ObiektyPRG_11',
+                pane: 'pane_ObiektyPRG_9',
                 opacity: 1,
                 color: 'rgba(35,35,35,0.7)',
                 dashArray: '',
@@ -1324,23 +818,23 @@
                 lineJoin: 'miter',
                 weight: 4.0, 
                 fillOpacity: 0,
-                interactive: true,
+                interactive: false,
             }
         }
-        map.createPane('pane_ObiektyPRG_11');
-        map.getPane('pane_ObiektyPRG_11').style.zIndex = 411;
-        map.getPane('pane_ObiektyPRG_11').style['mix-blend-mode'] = 'normal';
-        var layer_ObiektyPRG_11 = new L.geoJson.multiStyle(json_ObiektyPRG_11, {
+        map.createPane('pane_ObiektyPRG_9');
+        map.getPane('pane_ObiektyPRG_9').style.zIndex = 409;
+        map.getPane('pane_ObiektyPRG_9').style['mix-blend-mode'] = 'normal';
+        var layer_ObiektyPRG_9 = new L.geoJson.multiStyle(json_ObiektyPRG_9, {
             attribution: '',
-            interactive: true,
-            dataVar: 'json_ObiektyPRG_11',
-            layerName: 'layer_ObiektyPRG_11',
-            pane: 'pane_ObiektyPRG_11',
-            onEachFeature: pop_ObiektyPRG_11,
-            styles: [style_ObiektyPRG_11_0,style_ObiektyPRG_11_1,]
+            interactive: false,
+            dataVar: 'json_ObiektyPRG_9',
+            layerName: 'layer_ObiektyPRG_9',
+            pane: 'pane_ObiektyPRG_9',
+            onEachFeature: pop_ObiektyPRG_9,
+            styles: [style_ObiektyPRG_9_0,style_ObiektyPRG_9_1,]
         });
-        bounds_group.addLayer(layer_ObiektyPRG_11);
-        map.addLayer(layer_ObiektyPRG_11);
+        bounds_group.addLayer(layer_ObiektyPRG_9);
+        map.addLayer(layer_ObiektyPRG_9);
         var osmGeocoder = new L.Control.Geocoder({
             collapsed: true,
             position: 'topleft',
@@ -1351,296 +845,14 @@
         .className += ' fa fa-search';
         document.getElementsByClassName('leaflet-control-geocoder-icon')[0]
         .title += 'Search for a place';
-        var baseMaps = {};
-        L.control.layers(baseMaps,{'<img src="legend/ObiektyPRG_11.png" /> Obiekty PRG': layer_ObiektyPRG_11,'Miejsca Historyczne<br /><table><tr><td style="text-align: center;"><img src="legend/MiejscaHistoryczne_10_Wykopaliskaarcheologiczne0.png" /></td><td>Wykopaliska archeologiczne</td></tr><tr><td style="text-align: center;"><img src="legend/MiejscaHistoryczne_10_Miejscapowybuchachbomb1.png" /></td><td>Miejsca po wybuchach bomb</td></tr><tr><td style="text-align: center;"><img src="legend/MiejscaHistoryczne_10_Zamkiiruiny2.png" /></td><td>Zamki i ruiny</td></tr><tr><td style="text-align: center;"><img src="legend/MiejscaHistoryczne_10_Miejscapamięci3.png" /></td><td>Miejsca pamięci</td></tr></table>': layer_MiejscaHistoryczne_10,'Miejsca Historyczne<br /><table><tr><td style="text-align: center;"><img src="legend/MiejscaHistoryczne_9_Wykopaliskaarcheologiczne0.png" /></td><td>Wykopaliska archeologiczne</td></tr><tr><td style="text-align: center;"><img src="legend/MiejscaHistoryczne_9_Muzea1.png" /></td><td>Muzea</td></tr><tr><td style="text-align: center;"><img src="legend/MiejscaHistoryczne_9_Pałace2.png" /></td><td>Pałace</td></tr><tr><td style="text-align: center;"><img src="legend/MiejscaHistoryczne_9_Miejscawybuchóworazpolawalki3.png" /></td><td>Miejsca wybuchów oraz pola walki</td></tr><tr><td style="text-align: center;"><img src="legend/MiejscaHistoryczne_9_Fortyzamkiruinyimuryobronne4.png" /></td><td>Forty, zamki, ruiny i mury obronne</td></tr><tr><td style="text-align: center;"><img src="legend/MiejscaHistoryczne_9_Miejscapamięcigrobowce5.png" /></td><td>Miejsca pamięci, grobowce</td></tr></table>': cluster_MiejscaHistoryczne_9,'Sztuka<br /><table><tr><td style="text-align: center;"><img src="legend/Sztuka_8_Atrakcje0.png" /></td><td>Atrakcje</td></tr><tr><td style="text-align: center;"><img src="legend/Sztuka_8_Galerie1.png" /></td><td>Galerie</td></tr><tr><td style="text-align: center;"><img src="legend/Sztuka_8_Miejscawidokowe2.png" /></td><td>Miejsca widokowe</td></tr><tr><td style="text-align: center;"><img src="legend/Sztuka_8_Dziełasztuki3.png" /></td><td>Dzieła sztuki</td></tr></table>': cluster_Sztuka_8,'Odpoczynek<br /><table><tr><td style="text-align: center;"><img src="legend/Odpoczynek_7_Kawiarnie0.png" /></td><td>Kawiarnie</td></tr><tr><td style="text-align: center;"><img src="legend/Odpoczynek_7_Wodapitna1.png" /></td><td>Woda pitna</td></tr><tr><td style="text-align: center;"><img src="legend/Odpoczynek_7_Restauracje2.png" /></td><td>Restauracje</td></tr><tr><td style="text-align: center;"><img src="legend/Odpoczynek_7_Toalety3.png" /></td><td>Toalety</td></tr></table>': cluster_Odpoczynek_7,'Inne<br /><table><tr><td style="text-align: center;"><img src="legend/Inne_6_cemetery0.png" /></td><td>cemetery</td></tr><tr><td style="text-align: center;"><img src="legend/Inne_6_themepark1.png" /></td><td>theme_park</td></tr></table>': layer_Inne_6,'Inne<br /><table><tr><td style="text-align: center;"><img src="legend/Inne_5_Ławka0.png" /></td><td>Ławka</td></tr><tr><td style="text-align: center;"><img src="legend/Inne_5_Budynkiwieże1.png" /></td><td>Budynki, wieże</td></tr><tr><td style="text-align: center;"><img src="legend/Inne_5_Miejsaschronuzwierząt2.png" /></td><td>Miejsa schronu zwierząt</td></tr><tr><td style="text-align: center;"><img src="legend/Inne_5_Punktyinformacyjne3.png" /></td><td>Punkty informacyjne</td></tr><tr><td style="text-align: center;"><img src="legend/Inne_5_Kolumny4.png" /></td><td>Kolumny</td></tr><tr><td style="text-align: center;"><img src="legend/Inne_5_Miejscareligijne5.png" /></td><td>Miejsca religijne</td></tr><tr><td style="text-align: center;"><img src="legend/Inne_5_Parkirozrywki6.png" /></td><td>Parki rozrywki</td></tr></table>': cluster_Inne_5,'Schronienie i Zakwaterowanie<br /><table><tr><td style="text-align: center;"><img src="legend/SchronienieiZakwaterowanie_4_Kempingi0.png" /></td><td>Kempingi</td></tr><tr><td style="text-align: center;"><img src="legend/SchronienieiZakwaterowanie_4_Miejscapostojukamperów1.png" /></td><td>Miejsca postoju kamperów</td></tr><tr><td style="text-align: center;"><img src="legend/SchronienieiZakwaterowanie_4_Zakwaterowania2.png" /></td><td>Zakwaterowania</td></tr><tr><td style="text-align: center;"><img src="legend/SchronienieiZakwaterowanie_4_Schronienei3.png" /></td><td>Schronienei</td></tr></table>': cluster_SchronienieiZakwaterowanie_4,'Natura<br /><table><tr><td style="text-align: center;"><img src="legend/Natura_3_Fontannyźródłanaturalne0.png" /></td><td>Fontanny, źródła naturalne</td></tr><tr><td style="text-align: center;"><img src="legend/Natura_3_Plaże1.png" /></td><td>Plaże</td></tr><tr><td style="text-align: center;"><img src="legend/Natura_3_Jaskinie2.png" /></td><td>Jaskinie</td></tr><tr><td style="text-align: center;"><img src="legend/Natura_3_Parkiirezerwaty3.png" /></td><td>Parki i rezerwaty</td></tr><tr><td style="text-align: center;"><img src="legend/Natura_3_Szczyty4.png" /></td><td>Szczyty</td></tr><tr><td style="text-align: center;"><img src="legend/Natura_3_Miejscapiknikowe5.png" /></td><td>Miejsca piknikowe</td></tr><tr><td style="text-align: center;"><img src="legend/Natura_3_Chatywotoczeniunatury6.png" /></td><td>Chaty w otoczeniu natury</td></tr><tr><td style="text-align: center;"><img src="legend/Natura_3_Zoo7.png" /></td><td>Zoo</td></tr></table>': cluster_Natura_3,'<img src="legend/Ciekiwodne_2.png" /> Cieki wodne': layer_Ciekiwodne_2,'Zbiorniki wodne<br /><table><tr><td style="text-align: center;"><img src="legend/Zbiornikiwodne_1_dockreservoirriverbankwater0.png" /></td><td>dock,reservoir,riverbank,water</td></tr><tr><td style="text-align: center;"><img src="legend/Zbiornikiwodne_1_wetland1.png" /></td><td>wetland</td></tr></table>': layer_Zbiornikiwodne_1,"OSM Standard": layer_OSMStandard_0,}).addTo(map);
-        map.on("zoomend", function(){
-
-                if (map.hasLayer(layer_Ciekiwodne_2)) {
-                    if (map.getZoom() <= 14 && map.getZoom() >= 19) {
-                        layer_Ciekiwodne_2.eachLayer(function (layer) {
-                            layer.openTooltip();
-                        });
-                    } else {
-                        layer_Ciekiwodne_2.eachLayer(function (layer) {
-                            layer.closeTooltip();
-                        });
-                    }
-                }
-        });
+        var baseMaps = {CartoCDN, OpenStreetMap, CyclOSM};
+        L.control.layers(baseMaps,{'<img src="legend/ObiektyPRG_9.png" /> Granica województwa': layer_ObiektyPRG_9,'Miejsca Historyczne<br /><table><tr><td style="text-align: center;"><img src="legend/MiejscaHistoryczne_8_Wykopaliskaarcheologiczne0.png" /></td><td>Wykopaliska archeologiczne</td></tr><tr><td style="text-align: center;"><img src="legend/MiejscaHistoryczne_8_Miejscapowybuchachbomb1.png" /></td><td>Miejsca po wybuchach bomb</td></tr><tr><td style="text-align: center;"><img src="legend/MiejscaHistoryczne_8_Zamkiiruiny2.png" /></td><td>Zamki i ruiny</td></tr><tr><td style="text-align: center;"><img src="legend/MiejscaHistoryczne_8_Miejscapamięci3.png" /></td><td>Miejsca pamięci</td></tr></table>': layer_MiejscaHistoryczne_8,'Miejsca Historyczne<br /><table><tr><td style="text-align: center;"><img src="legend/MiejscaHistoryczne_7_Wykopaliskaarcheologiczne0.png" /></td><td>Wykopaliska archeologiczne</td></tr><tr><td style="text-align: center;"><img src="legend/MiejscaHistoryczne_7_Muzea1.png" /></td><td>Muzea</td></tr><tr><td style="text-align: center;"><img src="legend/MiejscaHistoryczne_7_Pałace2.png" /></td><td>Pałace</td></tr><tr><td style="text-align: center;"><img src="legend/MiejscaHistoryczne_7_Miejscawybuchóworazpolawalki3.png" /></td><td>Miejsca wybuchów oraz pola walki</td></tr><tr><td style="text-align: center;"><img src="legend/MiejscaHistoryczne_7_Fortyzamkiruinyimuryobronne4.png" /></td><td>Forty, zamki, ruiny i mury obronne</td></tr><tr><td style="text-align: center;"><img src="legend/MiejscaHistoryczne_7_Miejscapamięcigrobowce5.png" /></td><td>Miejsca pamięci, grobowce</td></tr></table>': cluster_MiejscaHistoryczne_7,'Sztuka<br /><table><tr><td style="text-align: center;"><img src="legend/Sztuka_6_Atrakcje0.png" /></td><td>Atrakcje</td></tr><tr><td style="text-align: center;"><img src="legend/Sztuka_6_Galerie1.png" /></td><td>Galerie</td></tr><tr><td style="text-align: center;"><img src="legend/Sztuka_6_Miejscawidokowe2.png" /></td><td>Miejsca widokowe</td></tr><tr><td style="text-align: center;"><img src="legend/Sztuka_6_Dziełasztuki3.png" /></td><td>Dzieła sztuki</td></tr></table>': cluster_Sztuka_6,'Odpoczynek<br /><table><tr><td style="text-align: center;"><img src="legend/Odpoczynek_5_Kawiarnie0.png" /></td><td>Kawiarnie</td></tr><tr><td style="text-align: center;"><img src="legend/Odpoczynek_5_Wodapitna1.png" /></td><td>Woda pitna</td></tr><tr><td style="text-align: center;"><img src="legend/Odpoczynek_5_Restauracje2.png" /></td><td>Restauracje</td></tr><tr><td style="text-align: center;"><img src="legend/Odpoczynek_5_Toalety3.png" /></td><td>Toalety</td></tr></table>': cluster_Odpoczynek_5,'Schronienie i Zakwaterowanie<br /><table><tr><td style="text-align: center;"><img src="legend/SchronienieiZakwaterowanie_4_Kempingi0.png" /></td><td>Kempingi</td></tr><tr><td style="text-align: center;"><img src="legend/SchronienieiZakwaterowanie_4_Miejscapostojukamperów1.png" /></td><td>Miejsca postoju kamperów</td></tr><tr><td style="text-align: center;"><img src="legend/SchronienieiZakwaterowanie_4_Zakwaterowania2.png" /></td><td>Zakwaterowania</td></tr><tr><td style="text-align: center;"><img src="legend/SchronienieiZakwaterowanie_4_Schronienei3.png" /></td><td>Schronienei</td></tr></table>': cluster_SchronienieiZakwaterowanie_4,'Inne<br /><table><tr><td style="text-align: center;"><img src="legend/Inne_3_cemetery0.png" /></td><td>cemetery</td></tr><tr><td style="text-align: center;"><img src="legend/Inne_3_themepark1.png" /></td><td>theme_park</td></tr></table>': layer_Inne_3,'Inne<br /><table><tr><td style="text-align: center;"><img src="legend/Inne_2_Ławka0.png" /></td><td>Ławka</td></tr><tr><td style="text-align: center;"><img src="legend/Inne_2_Budynkiwieże1.png" /></td><td>Budynki, wieże</td></tr><tr><td style="text-align: center;"><img src="legend/Inne_2_Miejsaschronuzwierząt2.png" /></td><td>Miejsa schronu zwierząt</td></tr><tr><td style="text-align: center;"><img src="legend/Inne_2_Punktyinformacyjne3.png" /></td><td>Punkty informacyjne</td></tr><tr><td style="text-align: center;"><img src="legend/Inne_2_Kolumny4.png" /></td><td>Kolumny</td></tr><tr><td style="text-align: center;"><img src="legend/Inne_2_Miejscareligijne5.png" /></td><td>Miejsca religijne</td></tr><tr><td style="text-align: center;"><img src="legend/Inne_2_Parkirozrywki6.png" /></td><td>Parki rozrywki</td></tr></table>': cluster_Inne_2,'Natura<br /><table><tr><td style="text-align: center;"><img src="legend/Natura_1_Fontannyźródłanaturalne0.png" /></td><td>Fontanny, źródła naturalne</td></tr><tr><td style="text-align: center;"><img src="legend/Natura_1_Plaże1.png" /></td><td>Plaże</td></tr><tr><td style="text-align: center;"><img src="legend/Natura_1_Jaskinie2.png" /></td><td>Jaskinie</td></tr><tr><td style="text-align: center;"><img src="legend/Natura_1_Parkiirezerwaty3.png" /></td><td>Parki i rezerwaty</td></tr><tr><td style="text-align: center;"><img src="legend/Natura_1_Szczyty4.png" /></td><td>Szczyty</td></tr><tr><td style="text-align: center;"><img src="legend/Natura_1_Miejscapiknikowe5.png" /></td><td>Miejsca piknikowe</td></tr><tr><td style="text-align: center;"><img src="legend/Natura_1_Chatywotoczeniunatury6.png" /></td><td>Chaty w otoczeniu natury</td></tr><tr><td style="text-align: center;"><img src="legend/Natura_1_Zoo7.png" /></td><td>Zoo</td></tr></table>': cluster_Natura_1,"Tory kolejowe": OpenRailwayMap,"Ścieżki piesze": WaymarkedTrails_hiking,"Ścieżki rowerowe": WaymarkedTrails_cycling,}).addTo(map);
         setBounds();
-        var i = 0;
-        layer_Zbiornikiwodne_1.eachLayer(function(layer) {
-            var context = {
-                feature: layer.feature,
-                variables: {}
-            };
-            layer.bindTooltip((layer.feature.properties['name'] !== null?String('<div style="color: #0091ca; font-size: 10pt; font-style: italic; font-family: \'Cambria\', sans-serif;">' + layer.feature.properties['name']) + '</div>':''), {permanent: true, offset: [-0, -16], className: 'css_Zbiornikiwodne_1'});
-            labels.push(layer);
-            totalMarkers += 1;
-              layer.added = true;
-              addLabel(layer, i);
-              i++;
-        });
-        var i = 0;
-        layer_Ciekiwodne_2.eachLayer(function(layer) {
-            var context = {
-                feature: layer.feature,
-                variables: {}
-            };
-            layer.bindTooltip((layer.feature.properties['name'] !== null?String('<div style="color: #0091ca; font-size: 9pt; font-style: italic; font-family: \'Cambria\', sans-serif;">' + layer.feature.properties['name']) + '</div>':''), {permanent: true, offset: [-0, -16], className: 'css_Ciekiwodne_2'});
-            labels.push(layer);
-            totalMarkers += 1;
-              layer.added = true;
-              addLabel(layer, i);
-              i++;
-        });
-                if (map.hasLayer(layer_Ciekiwodne_2)) {
-                    if (map.getZoom() <= 14 && map.getZoom() >= 19) {
-                        layer_Ciekiwodne_2.eachLayer(function (layer) {
-                            layer.openTooltip();
-                        });
-                    } else {
-                        layer_Ciekiwodne_2.eachLayer(function (layer) {
-                            layer.closeTooltip();
-                        });
-                    }
-                }
-        var mapDiv = document.getElementById('map');
-        var row = document.createElement('div');
-        row.className="row";
-        row.id="all";
-        row.style.height = "100%";
-        var col1 = document.createElement('div');
-        col1.className="col9";
-        col1.id = "mapWindow";
-        col1.style.height = "99%";
-        col1.style.width = "80%";
-        col1.style.display = "inline-block";
-        var col2 = document.createElement('div');
-        col2.className="col3";
-        col2.id = "menu";
-        col2.style.display = "inline-block";
-        mapDiv.parentNode.insertBefore(row, mapDiv);
-        document.getElementById("all").appendChild(col1);
-        document.getElementById("all").appendChild(col2);
-        col1.appendChild(mapDiv)
-        var Filters = {"category": "str"};
-        function filterFunc() {
-          map.eachLayer(function(lyr){
-          if ("options" in lyr && "dataVar" in lyr["options"]){
-            features = this[lyr["options"]["dataVar"]].features.slice(0);
-            try{
-              for (key in Filters){
-                keyS = key.replace(/[^a-zA-Z0-9_]/g, "")
-                if (Filters[key] == "str" || Filters[key] == "bool"){
-                  var selection = [];
-                  var options = document.getElementById("sel_" + keyS).options
-                  for (var i=0; i < options.length; i++) {
-                    if (options[i].selected) selection.push(options[i].value);
-                  }
-                    try{
-                      if (key in features[0].properties){
-                        for (i = features.length - 1;
-                          i >= 0; --i){
-                          if (selection.indexOf(
-                          features[i].properties[key])<0
-                          && selection.length>0) {
-                          features.splice(i,1);
-                          }
-                        }
-                      }
-                    } catch(err){
-                  }
-                }
-                if (Filters[key] == "int"){
-                  sliderVals =  document.getElementById(
-                    "div_" + keyS).noUiSlider.get();
-                  try{
-                    if (key in features[0].properties){
-                    for (i = features.length - 1; i >= 0; --i){
-                      if (parseInt(features[i].properties[key])
-                          < sliderVals[0]
-                          || parseInt(features[i].properties[key])
-                          > sliderVals[1]){
-                            features.splice(i,1);
-                          }
-                        }
-                      }
-                    } catch(err){
-                    }
-                  }
-                if (Filters[key] == "real"){
-                  sliderVals =  document.getElementById(
-                    "div_" + keyS).noUiSlider.get();
-                  try{
-                    if (key in features[0].properties){
-                    for (i = features.length - 1; i >= 0; --i){
-                      if (features[i].properties[key]
-                          < sliderVals[0]
-                          || features[i].properties[key]
-                          > sliderVals[1]){
-                            features.splice(i,1);
-                          }
-                        }
-                      }
-                    } catch(err){
-                    }
-                  }
-                if (Filters[key] == "date"
-                  || Filters[key] == "datetime"
-                  || Filters[key] == "time"){
-                  try{
-                    if (key in features[0].properties){
-                      HTMLkey = key.replace(/[&\/\\#,+()$~%.'":*?<>{} ]/g, '');
-                      startdate = document.getElementById("dat_" +
-                        HTMLkey + "_date1").value.replace(" ", "T");
-                      enddate = document.getElementById("dat_" +
-                        HTMLkey + "_date2").value.replace(" ", "T");
-                      for (i = features.length - 1; i >= 0; --i){
-                        if (features[i].properties[key] < startdate
-                          || features[i].properties[key] > enddate){
-                          features.splice(i,1);
-                        }
-                      }
-                    }
-                  } catch(err){
-                  }
-                }
-              }
-            } catch(err){
-            }
-          this[lyr["options"]["layerName"]].clearLayers();
-          this[lyr["options"]["layerName"]].addData(features);
-        var i = 0;
-        layer_Zbiornikiwodne_1.eachLayer(function(layer) {
-            var context = {
-                feature: layer.feature,
-                variables: {}
-            };
-            layer.bindTooltip((layer.feature.properties['name'] !== null?String('<div style="color: #0091ca; font-size: 10pt; font-style: italic; font-family: \'Cambria\', sans-serif;">' + layer.feature.properties['name']) + '</div>':''), {permanent: true, offset: [-0, -16], className: 'css_Zbiornikiwodne_1'});
-            labels.push(layer);
-            totalMarkers += 1;
-              layer.added = true;
-              addLabel(layer, i);
-              i++;
-        });
-        var i = 0;
-        layer_Ciekiwodne_2.eachLayer(function(layer) {
-            var context = {
-                feature: layer.feature,
-                variables: {}
-            };
-            layer.bindTooltip((layer.feature.properties['name'] !== null?String('<div style="color: #0091ca; font-size: 9pt; font-style: italic; font-family: \'Cambria\', sans-serif;">' + layer.feature.properties['name']) + '</div>':''), {permanent: true, offset: [-0, -16], className: 'css_Ciekiwodne_2'});
-            labels.push(layer);
-            totalMarkers += 1;
-              layer.added = true;
-              addLabel(layer, i);
-              i++;
-        });
-          }
-          })
-        }
-            document.getElementById("menu").appendChild(
-                document.createElement("div"));
-            var div_category = document.createElement('div');
-            div_category.id = "div_category";
-            div_category.className= "filterselect";
-            document.getElementById("menu").appendChild(div_category);
-            sel_category = document.createElement('select');
-            sel_category.multiple = true;
-            sel_category.size = 10;
-            sel_category.id = "sel_category";
-            var category_options_str = "<option value='' unselected></option>";
-            sel_category.onchange = function(){filterFunc()};
-            category_options_str  += '<option value="alpine_hut">alpine_hut</option>';
-            category_options_str  += '<option value="aquarium">aquarium</option>';
-            category_options_str  += '<option value="archaeological_site">archaeological_site</option>';
-            category_options_str  += '<option value="battlefield">battlefield</option>';
-            category_options_str  += '<option value="beach">beach</option>';
-            category_options_str  += '<option value="bench">bench</option>';
-            category_options_str  += '<option value="bomb_crater">bomb_crater</option>';
-            category_options_str  += '<option value="boundary_stone">boundary_stone</option>';
-            category_options_str  += '<option value="building">building</option>';
-            category_options_str  += '<option value="cafe">cafe</option>';
-            category_options_str  += '<option value="camp_site">camp_site</option>';
-            category_options_str  += '<option value="caravan_site">caravan_site</option>';
-            category_options_str  += '<option value="castle">castle</option>';
-            category_options_str  += '<option value="cave_entrance">cave_entrance</option>';
-            category_options_str  += '<option value="cemetery">cemetery</option>';
-            category_options_str  += '<option value="chalet">chalet</option>';
-            category_options_str  += '<option value="chapel">chapel</option>';
-            category_options_str  += '<option value="church">church</option>';
-            category_options_str  += '<option value="city_gate">city_gate</option>';
-            category_options_str  += '<option value="citywalls">citywalls</option>';
-            category_options_str  += '<option value="drinking_water">drinking_water</option>';
-            category_options_str  += '<option value="fire_ladder">fire_ladder</option>';
-            category_options_str  += '<option value="fort">fort</option>';
-            category_options_str  += '<option value="fountain">fountain</option>';
-            category_options_str  += '<option value="game_feeding;shelter">game_feeding;shelter</option>';
-            category_options_str  += '<option value="gate">gate</option>';
-            category_options_str  += '<option value="guest_house">guest_house</option>';
-            category_options_str  += '<option value="heritage">heritage</option>';
-            category_options_str  += '<option value="hostel">hostel</option>';
-            category_options_str  += '<option value="hotel">hotel</option>';
-            category_options_str  += '<option value="hunting_lodge">hunting_lodge</option>';
-            category_options_str  += '<option value="information">information</option>';
-            category_options_str  += '<option value="manor">manor</option>';
-            category_options_str  += '<option value="memorial">memorial</option>';
-            category_options_str  += '<option value="military">military</option>';
-            category_options_str  += '<option value="mill">mill</option>';
-            category_options_str  += '<option value="monument">monument</option>';
-            category_options_str  += '<option value="motel">motel</option>';
-            category_options_str  += '<option value="museum">museum</option>';
-            category_options_str  += '<option value="nature_reserve">nature_reserve</option>';
-            category_options_str  += '<option value="palace">palace</option>';
-            category_options_str  += '<option value="park">park</option>';
-            category_options_str  += '<option value="peak">peak</option>';
-            category_options_str  += '<option value="picnic_site">picnic_site</option>';
-            category_options_str  += '<option value="pillory">pillory</option>';
-            category_options_str  += '<option value="place_of_worship">place_of_worship</option>';
-            category_options_str  += '<option value="protected_building">protected_building</option>';
-            category_options_str  += '<option value="restaurant">restaurant</option>';
-            category_options_str  += '<option value="ruins">ruins</option>';
-            category_options_str  += '<option value="shelter">shelter</option>';
-            category_options_str  += '<option value="spring">spring</option>';
-            category_options_str  += '<option value="stone">stone</option>';
-            category_options_str  += '<option value="theme_park">theme_park</option>';
-            category_options_str  += '<option value="toilets">toilets</option>';
-            category_options_str  += '<option value="tomb">tomb</option>';
-            category_options_str  += '<option value="tower">tower</option>';
-            category_options_str  += '<option value="water">water</option>';
-            category_options_str  += '<option value="wayside_chapel">wayside_chapel</option>';
-            category_options_str  += '<option value="wayside_cross">wayside_cross</option>';
-            category_options_str  += '<option value="wayside_shrine">wayside_shrine</option>';
-            category_options_str  += '<option value="wilderness_hut">wilderness_hut</option>';
-            category_options_str  += '<option value="zoo">zoo</option>';
-            sel_category.innerHTML = category_options_str;
-            div_category.appendChild(sel_category);
-            var lab_category = document.createElement('div');
-            lab_category.innerHTML = 'category';
-            lab_category.className = 'filterlabel';
-            div_category.appendChild(lab_category);
-            var reset_category = document.createElement('div');
-            reset_category.innerHTML = 'clear filter';
-            reset_category.className = 'filterlabel';
-            reset_category.onclick = function() {
-                var options = document.getElementById("sel_category").options;
-                for (var i=0; i < options.length; i++) {
-                    options[i].selected = false;
-                }
-                filterFunc();
-            };
-            div_category.appendChild(reset_category);
-        resetLabels([layer_Zbiornikiwodne_1,layer_Ciekiwodne_2]);
-        map.on("zoomend", function(){
-            resetLabels([layer_Zbiornikiwodne_1,layer_Ciekiwodne_2]);
-        });
-        map.on("layeradd", function(){
-            resetLabels([layer_Zbiornikiwodne_1,layer_Ciekiwodne_2]);
-        });
-        map.on("layerremove", function(){
-            resetLabels([layer_Zbiornikiwodne_1,layer_Ciekiwodne_2]);
-        });
+        L.control.scale({
+            maxWidth: 200,
+            imperial: false,
+            position: 'bottomleft',
+        }).addTo(map);
         </script>
     </body>
 </html>
