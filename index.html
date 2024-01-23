@@ -12,6 +12,7 @@
         <link rel="stylesheet" href="css/MarkerCluster.Default.css">
         <link rel="stylesheet" href="css/leaflet-control-geocoder.Geocoder.css">
         <link rel="stylesheet" href="css/leaflet-measure.css">
+        
         <style>
         html, body, #map {
             width: 100%;
@@ -19,10 +20,26 @@
             padding: 0;
             margin: 0;
         }
+        #welcome-screen {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: white;
+            padding: 20px;
+            border: 1px solid #ccc;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            z-index: 1000;
+        }
         </style>
         <title></title>
     </head>
     <body>
+        <div id="welcome-screen">
+            <h1>Mapa Turystyczna Województwa Opolskiego</h1>
+            <p>Autor: Adam Koźlik (266263)</p>
+        </div>
         <div id="map">
         </div>
         <script src="js/qgis2web_expressions.js"></script>
@@ -49,8 +66,11 @@
         <script src="data/ObiektyPRG_9.js"></script>
         <script>
         var map = L.map('map', {
-            zoomControl:true, maxZoom:20, minZoom:1
+            zoomControl:true, maxZoom:18, minZoom:1
         })
+        setTimeout(function () {
+            document.getElementById('welcome-screen').style.display = 'none';
+        }, 3500);
         var hash = new L.Hash(map);
         map.attributionControl.setPrefix('<a href="https://github.com/tomchadwin/qgis2web" target="_blank">qgis2web</a> &middot; <a href="https://leafletjs.com" title="A JS library for interactive maps">Leaflet</a> &middot; <a href="https://qgis.org">QGIS</a>');
         var autolinker = new Autolinker({truncate: {length: 30, location: 'smart'}});
@@ -83,7 +103,7 @@
             maxZoom: 19,
             minNativeZoom: 0,
             maxNativeZoom: 19
-        });
+        }).addTo(map);
         
         var OpenStreetMap = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
             maxZoom: 19,
@@ -285,22 +305,6 @@
         cluster_Inne_2.addLayer(layer_Inne_2);
         bounds_group.addLayer(layer_Inne_2);
 
-        function pop_Inne_3(feature, layer) {
-            var popupContent = '<table>\
-                    <tr>\
-                        <th scope="row">name</th>\
-                        <td>' + (feature.properties['name'] !== null ? autolinker.link(feature.properties['name'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <th scope="row">url</th>\
-                        <td>' + (feature.properties['url'] !== null ? autolinker.link(feature.properties['url'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2"><strong>category</strong><br />' + (feature.properties['category'] !== null ? autolinker.link(feature.properties['category'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                </table>';
-            layer.bindPopup(popupContent, {maxHeight: 400});
-        }
         function style_Inne_4_0(feature) {
             var context = {
                 feature: feature,
@@ -350,7 +354,6 @@
             dataVar: 'json_Inne_3',
             layerName: 'layer_Inne_3',
             pane: 'pane_Inne_3',
-            onEachFeature: pop_Inne_3,
             style: style_Inne_4_0,
         });
         bounds_group.addLayer(layer_Inne_3);
@@ -688,18 +691,6 @@
         cluster_MiejscaHistoryczne_7.addLayer(layer_MiejscaHistoryczne_7);
         bounds_group.addLayer(layer_MiejscaHistoryczne_7);
 
-        function pop_MiejscaHistoryczne_8(feature, layer) {
-            var popupContent = '<table>\
-                    <tr>\
-                        <th scope="row">name</th>\
-                        <td>' + (feature.properties['name'] !== null ? autolinker.link(feature.properties['name'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2"><strong>category</strong><br />' + (feature.properties['category'] !== null ? autolinker.link(feature.properties['category'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                </table>';
-            layer.bindPopup(popupContent, {maxHeight: 400});
-        }
         function style_MiejscaHistoryczne_8_0(feature) {
             var context = {
                 feature: feature,
@@ -774,7 +765,6 @@
             dataVar: 'json_MiejscaHistoryczne_8',
             layerName: 'layer_MiejscaHistoryczne_8',
             pane: 'pane_MiejscaHistoryczne_8',
-            onEachFeature: pop_MiejscaHistoryczne_8,
             style: style_MiejscaHistoryczne_8_0,
         });
         bounds_group.addLayer(layer_MiejscaHistoryczne_8);
